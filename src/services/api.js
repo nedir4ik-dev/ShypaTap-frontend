@@ -28,6 +28,8 @@ export default {
   updateProfile: (data) => apiClient.patch("/profile", data),
   changePassword: (data) => apiClient.post("/change-password", data),
   getDoctors: (params) => apiClient.get("/doctors", { params }),
+  getDoctorProfile: () => apiClient.get("/doctor/profile"), // Eger bar bolsa
+  updateDoctorProfile: (data) => apiClient.patch("/doctor/profile", data),
   getDoctorDetail: (id) => apiClient.get(`/doctors/${id}`),
   getDoctorSlots: (id, params) =>
     apiClient.get(`/doctors/${id}/slots`, { params }),

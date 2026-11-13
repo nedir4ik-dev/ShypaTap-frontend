@@ -13,6 +13,7 @@ import DoctorSchedule from "@/views/doctor/ScheduleView.vue";
 import RoleDashboard from "@/views/shared/RoleDashboard.vue";
 import AccountView from "@/views/shared/AccountView.vue";
 import ClinicsView from "@/views/public/ClinicsView.vue";
+import DoctorProfileView from "@/views/doctor/DoctorProfileView.vue";
 const routes = [
   {
     path: "/",
@@ -79,6 +80,11 @@ const routes = [
         path: "doctor/notifications",
         component: AccountView,
         props: { mode: "notifications" },
+        meta: { requiresAuth: true, role: "doctor" },
+      },
+      {
+        path: "/doctor/profile",
+        component: DoctorProfileView,
         meta: { requiresAuth: true, role: "doctor" },
       },
       {

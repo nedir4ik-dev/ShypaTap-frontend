@@ -1,111 +1,100 @@
-<script setup>
-import { onMounted, ref } from 'vue'
-import api from '@/services/api'
-
-const appointments = ref([])
-const loading = ref(true)
-const error = ref('')
-
-const status = {
-    pending: 'Garaşylýar',
-    confirmed: 'Tassyklanan',
-    rejected: 'Ret edilen',
-    completed: 'Tamamlanan',
-    cancelled: 'Ýatyrylan',
-    no_show: 'Gelmedi'
-}
-
-const formatDate = (dateString) => {
-    if (!dateString) return '-'
-    const parts = dateString.split('T')[0]
-    return parts
-}
-
-const getStatusClass = (st) => {
-    switch (st) {
-        case 'confirmed': return 'bg-emerald-100 text-emerald-800 dark:bg-emerald-950 dark:text-emerald-300'
-        case 'pending': return 'bg-amber-100 text-amber-800 dark:bg-amber-950 dark:text-amber-300'
-        case 'rejected': case 'cancelled': return 'bg-red-100 text-red-800 dark:bg-red-950 dark:text-red-300'
-        default: return 'bg-slate-100 text-slate-800 dark:bg-slate-800 dark:text-slate-300'
-    }
-}
-
-async function load() {
-    loading.value = true
-    error.value = ''
-    try {
-        const { data } = await api.client.get('/doctor/appointments')
-        appointments.value = data.data || []
-    } catch (e) {
-        error.value = e.response?.data?.message || 'Maglumatlary alyp bolmady.'
-    } finally {
-        loading.value = false
-    }
-}
-
-async function change(a, newStatus) {
-    try {
-        await api.client.patch(`/doctor/appointments/${a.id}/status`, { status: newStatus })
-        await load()
-    } catch (e) {
-        error.value = e.response?.data?.message || 'Ýagdaýy üýtgedip bolmady.'
-    }
-}
-
-onMounted(load)
-</script>
-
 <template>
-    <section class="mx-auto max-w-7xl px-4 py-10">
-        <h1 class="mb-2 text-3xl font-bold">Lukman paneli</h1>
-        <p class="mb-8 text-slate-500">Kabul ýazgylaryňyzy dolandyryň.</p>
-        <div v-if="error" class="mb-4 rounded-xl bg-red-50 p-4 text-red-700">{{ error }}</div>
-        <div class="mb-6 flex flex-wrap gap-3">
-            <button @click="load" class="rounded-xl bg-emerald-700 px-4 py-2 text-white">Täzele</button>
-            <router-link to="/doctor/schedule"
-                class="rounded-xl border border-emerald-700 px-4 py-2 text-emerald-800 dark:text-emerald-300">Iş
-                tertibi</router-link>
+    <section class="mx-auto max-w-7xl px-4 py-10 space-y-10">
+        <!-- Welcome Banner -->
+        <div
+            class="bg-linear-to-br from-emerald-700 via-teal-800 to-slate-900 rounded-3xl p-8 text-white shadow-2xl relative overflow-hidden flex flex-col md:flex-row items-center justify-between gap-6">
+            <div
+                class="absolute -top-24 -right-24 w-80 h-80 bg-emerald-400/20 rounded-full blur-3xl pointer-events-none">
+            </div>
+
+            <div class="space-y-2 relative z-10 text-center md:text-left">
+                <span
+                    class="inline-flex items-center gap-1.5 px-3 py-1 rounded-full bg-white/15 backdrop-blur-md text-emerald-100 text-xs font-semibold">
+                    <i class="ti ti-stethoscope text-emerald-300"></i> Lukman Paneli
+                </span>
+                <h1 class="text-3xl md:text-4xl font-extrabold tracking-tight">
+                    Hoş geldiňiz, {{ doctorName || 'Lukman' }}!
+                </h1>
+                <p class="text-emerald-100/80 text-sm">
+                    Kabul ýazgylaryňyzy yzarlaň, iş tertibiňizi ýa-da şahsy profiliňizi sazlaň.
+                </p>
+            </div>
+
+            <div class="flex items-center gap-3 relative z-10">
+                <router-link to="/doctor/appointments"
+                    class="px-5 py-3 rounded-2xl bg-white text-emerald-900 font-bold text-sm hover:bg-emerald-50 transition shadow-lg flex items-center gap-2">
+                    <i class="ti ti-calendar-event text-lg"></i> Kabul ýazgylarym
+                </router-link>
+            </div>
         </div>
-        <div v-if="loading" class="py-8 text-center">Ýüklenýär...</div>
-        <div v-else
-            class="glass-card overflow-x-auto p-4 bg-white/70 dark:bg-slate-900/70 backdrop-blur-md rounded-3xl border border-slate-200/60 dark:border-slate-800/60 shadow-lg">
-            <h2 class="mb-4 text-xl font-semibold text-slate-900 dark:text-slate-100">Kabul ýazgylary</h2>
-            <table class="w-full text-left text-sm">
-                <thead>
-                    <tr class="border-b border-slate-200 dark:border-slate-800 text-slate-500">
-                        <th class="p-3">Näsag</th>
-                        <th class="p-3">Sene</th>
-                        <th class="p-3">Wagt</th>
-                        <th class="p-3">Ýagdaýy</th>
-                        <th class="p-3">Hereket</th>
-                    </tr>
-                </thead>
-                <tbody>
-                    <tr v-for="a in appointments" :key="a.id"
-                        class="border-t border-slate-200 dark:border-slate-800 text-slate-800 dark:text-slate-200">
-                        <td class="p-3 font-medium">{{ a.patient?.name || 'Näsag' }}</td>
-                        <td class="p-3">{{ formatDate(a.appointment_date) }}</td>
-                        <td class="p-3">{{ a.start_time }}</td>
-                        <td class="p-3">
-                            <span class="px-2.5 py-1 rounded-full text-xs font-semibold"
-                                :class="getStatusClass(a.status)">
-                                {{ status[a.status] || a.status }}
-                            </span>
-                        </td>
-                        <td class="p-3 flex flex-wrap gap-2">
-                            <button v-if="a.status === 'pending'" @click="change(a, 'confirmed')"
-                                class="text-emerald-600 hover:underline font-medium">Tassykla</button>
-                            <button v-if="a.status === 'pending'" @click="change(a, 'rejected')"
-                                class="text-red-600 hover:underline font-medium">Ret et</button>
-                            <button v-if="a.status === 'confirmed'" @click="change(a, 'completed')"
-                                class="text-emerald-600 hover:underline font-medium">Tamamla</button>
-                            <button v-if="a.status === 'confirmed'" @click="change(a, 'no_show')"
-                                class="text-amber-600 hover:underline font-medium">Gelmedi</button>
-                        </td>
-                    </tr>
-                </tbody>
-            </table>
-            <p v-if="!appointments.length" class="py-8 text-center text-slate-500">Kabul ýazgysy ýok.</p>
+
+        <!-- Navigation Cards (Grid) -->
+        <div class="grid gap-6 sm:grid-cols-2 lg:grid-cols-4">
+            <!-- Kabul Ýazgylary -->
+            <router-link to="/doctor/appointments"
+                class="bg-white/70 dark:bg-slate-900/70 backdrop-blur-xl p-6 rounded-3xl border border-slate-200/60 dark:border-slate-800/60 shadow-xl hover:shadow-2xl transition-all group">
+                <div
+                    class="w-12 h-12 rounded-2xl bg-emerald-100 dark:bg-emerald-950/60 text-emerald-700 dark:text-emerald-400 flex items-center justify-center text-2xl mb-4 group-hover:scale-110 transition">
+                    <i class="ti ti-calendar-time"></i>
+                </div>
+                <h2 class="text-lg font-bold text-slate-900 dark:text-slate-100">Kabul ýazgylary</h2>
+                <p class="mt-2 text-xs text-slate-500 dark:text-slate-400">Näsaglaryň kabul ediş wagtlaryny tassyklaň.
+                </p>
+            </router-link>
+
+            <!-- Iş Tertibi -->
+            <router-link to="/doctor/schedule"
+                class="bg-white/70 dark:bg-slate-900/70 backdrop-blur-xl p-6 rounded-3xl border border-slate-200/60 dark:border-slate-800/60 shadow-xl hover:shadow-2xl transition-all group">
+                <div
+                    class="w-12 h-12 rounded-2xl bg-teal-100 dark:bg-teal-950/60 text-teal-700 dark:text-teal-400 flex items-center justify-center text-2xl mb-4 group-hover:scale-110 transition">
+                    <i class="ti ti-calendar-stats"></i>
+                </div>
+                <h2 class="text-lg font-bold text-slate-900 dark:text-slate-100">Iş tertibi</h2>
+                <p class="mt-2 text-xs text-slate-500 dark:text-slate-400">Işleýän günleriňizi we sagatlaryňyzy sazlaň.
+                </p>
+            </router-link>
+
+            <!-- Şahsy Profil (Aýratyn sahypa ýa-da formere geçmek üçin) -->
+            <router-link to="/doctor/profile"
+                class="bg-white/70 dark:bg-slate-900/70 backdrop-blur-xl p-6 rounded-3xl border border-slate-200/60 dark:border-slate-800/60 shadow-xl hover:shadow-2xl transition-all group">
+                <div
+                    class="w-12 h-12 rounded-2xl bg-amber-100 dark:bg-amber-950/60 text-amber-700 dark:text-amber-400 flex items-center justify-center text-2xl mb-4 group-hover:scale-110 transition">
+                    <i class="ti ti-user-edit"></i>
+                </div>
+                <h2 class="text-lg font-bold text-slate-900 dark:text-slate-100">Şahsy profil</h2>
+                <p class="mt-2 text-xs text-slate-500 dark:text-slate-400">Adyňyzy, bahanyzy we iş tejribäňizi täzeläň.
+                </p>
+            </router-link>
+
+            <!-- Bildirişler -->
+            <router-link to="/doctor/notifications"
+                class="bg-white/70 dark:bg-slate-900/70 backdrop-blur-xl p-6 rounded-3xl border border-slate-200/60 dark:border-slate-800/60 shadow-xl hover:shadow-2xl transition-all group">
+                <div
+                    class="w-12 h-12 rounded-2xl bg-blue-100 dark:bg-blue-950/60 text-blue-700 dark:text-blue-400 flex items-center justify-center text-2xl mb-4 group-hover:scale-110 transition">
+                    <i class="ti ti-bell-ringing"></i>
+                </div>
+                <h2 class="text-lg font-bold text-slate-900 dark:text-slate-100">Bildirişler</h2>
+                <p class="mt-2 text-xs text-slate-500 dark:text-slate-400">Täze kabul ýazgylary barada habar alyň.</p>
+            </router-link>
         </div>
     </section>
 </template>
+
+<script setup>
+import { ref, onMounted } from 'vue'
+import { useAuthStore } from '@/stores/authStore'
+import api from '@/services/api'
+
+const auth = useAuthStore()
+const doctorName = ref(auth.user?.name || '')
+
+onMounted(async () => {
+    try {
+        const { data } = await api.client.get('/doctor/profile')
+        const doc = data.data || data
+        doctorName.value = doc.user?.name || doc.name || auth.user?.name || ''
+    } catch (e) {
+        console.error('Lukman maglumatyny alyp bolmady', e)
+    }
+})
+</script>
