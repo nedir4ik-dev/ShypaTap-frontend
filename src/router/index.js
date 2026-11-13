@@ -12,6 +12,7 @@ import DoctorDashboard from "@/views/doctor/DashboardView.vue";
 import DoctorSchedule from "@/views/doctor/ScheduleView.vue";
 import RoleDashboard from "@/views/shared/RoleDashboard.vue";
 import AccountView from "@/views/shared/AccountView.vue";
+import ClinicsView from "@/views/public/ClinicsView.vue";
 const routes = [
   {
     path: "/",
@@ -19,7 +20,7 @@ const routes = [
     children: [
       { path: "", name: "home", component: HomeView },
       { path: "doctors", name: "doctors", component: DoctorsView },
-      { path: "clinics", redirect: "/clinics" },
+      { path: "clinics", name: "clinics", component: ClinicsView },
       { path: "doctors/:id", name: "doctor-detail", component: DoctorsDetail },
       {
         path: "login",

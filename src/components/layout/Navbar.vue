@@ -55,13 +55,12 @@ const closeMenu = () => {
                     class="flex items-center gap-1.5 text-sm hover:text-emerald-600 dark:hover:text-emerald-400 transition py-1">
                     <i class="ti ti-stethoscope text-lg"></i> Lukmanlar
                 </router-link>
-                <router-link to="/doctors"
+                <router-link to="/clinics"
                     class="flex items-center gap-1.5 text-sm hover:text-emerald-600 dark:hover:text-emerald-400 transition py-1">
                     <i class="ti ti-building-hospital text-lg"></i> Klinikalar
                 </router-link>
             </nav>
 
-            <!-- Right Actions (Theme, Auth & Mobile Hamburger Button) -->
             <div class="flex items-center gap-3">
                 <!-- Theme Toggle Button -->
                 <button @click="toggleTheme"
