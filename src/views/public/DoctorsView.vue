@@ -13,7 +13,6 @@ const specializations = ref([])
 const clinics = ref([])
 const loading = ref(true)
 
-// URL-däki query parametrleri başlangyç baha hökmünde alýarys
 const searchQuery = ref(String(route.query.search || ''))
 const selectedSpecialization = ref(String(route.query.specialization || ''))
 const selectedClinic = ref(String(route.query.clinic || ''))
@@ -41,14 +40,12 @@ onMounted(async () => {
     }
 })
 
-// URL üýtgände filterleri täzelemek
 watch(() => route.query, (newQuery) => {
     searchQuery.value = String(newQuery.search || '')
     selectedSpecialization.value = String(newQuery.specialization || '')
     selectedClinic.value = String(newQuery.clinic || '')
 })
 
-// Inputlar üýtgände URL-i hem täzelemek (islege görä)
 watch([searchQuery, selectedSpecialization, selectedClinic], ([newSearch, newSpec, newClinic]) => {
     const query = {}
     if (newSearch) query.search = newSearch
@@ -62,7 +59,6 @@ const filteredDoctors = computed(() => {
         const docName = doc.name || ''
         const docSpec = doc.specialization?.name || doc.specialization || ''
 
-        // Lukmanyň işläp bilýän ähli klinikalarynyň atlaryny alýarys
         const doctorClinicsList = doc.clinics?.length
             ? doc.clinics.map(c => c.name)
             : [doc.clinic?.name || doc.clinicName || '']
@@ -72,7 +68,6 @@ const filteredDoctors = computed(() => {
 
         const matchesSpec = selectedSpecialization.value === '' || docSpec === selectedSpecialization.value
 
-        // Saýlanan klinika lukmanyň klinikalarynyň arasynda barmy?
         const matchesClinic = selectedClinic.value === '' || doctorClinicsList.includes(selectedClinic.value)
 
         return matchesSearch && matchesSpec && matchesClinic

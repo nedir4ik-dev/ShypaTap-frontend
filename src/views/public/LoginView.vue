@@ -31,7 +31,7 @@
                 </div>
 
                 <button type="submit" :disabled="loading"
-                    class="w-full py-3 px-4 bg-blue-600 hover:bg-blue-700 text-white font-medium rounded-xl shadow-lg shadow-blue-500/30 transition-all disabled:opacity-50 text-sm cursor-pointer">
+                    class="w-full py-3 px-4 bg-emerald-600 hover:bg-emerald-700 text-white font-medium rounded-xl shadow-lg shadow-green-500/30 transition-all disabled:opacity-50 text-sm cursor-pointer">
                     {{ loading ? 'Barlanylýär...' : 'Giriş etmek' }}
                 </button>
             </form>

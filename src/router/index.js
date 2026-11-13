@@ -45,20 +45,19 @@ const routes = [
         meta: { requiresAuth: true, role: "patient" },
       },
       {
-        path: "patient/profile",
+        path: "/patient/profile",
         component: AccountView,
-        meta: { requiresAuth: true, role: "patient" },
+        props: { mode: "profile" },
       },
       {
-        path: "patient/settings",
-        redirect: "/patient/profile",
-        meta: { requiresAuth: true, role: "patient" },
-      },
-      {
-        path: "patient/password",
+        path: "/patient/password",
         component: AccountView,
         props: { mode: "password" },
-        meta: { requiresAuth: true, role: "patient" },
+      },
+      {
+        path: "/patient/notifications",
+        component: AccountView,
+        props: { mode: "notifications" },
       },
       {
         path: "patient/notifications",

@@ -109,7 +109,8 @@ watch(mode, (newMode) => {
                 Telefon
                 <input v-model="profile.phone" class="mt-1 w-full rounded-xl border p-3" />
             </label>
-            <button type="submit" class="rounded-xl bg-emerald-700 px-5 py-3 text-white transition hover:bg-emerald-800">
+            <button type="submit"
+                class="rounded-xl bg-emerald-700 px-5 py-3 text-white transition hover:bg-emerald-800">
                 Maglumatlary sakla
             </button>
         </form>
@@ -117,17 +118,21 @@ watch(mode, (newMode) => {
         <form v-else-if="mode === 'password'" @submit.prevent="changePassword" class="glass-card space-y-4 p-6">
             <label class="block text-sm">
                 Häzirki parol
-                <input v-model="password.current_password" type="password" required class="mt-1 w-full rounded-xl border p-3" />
+                <input v-model="password.current_password" type="password" required
+                    class="mt-1 w-full rounded-xl border p-3" />
             </label>
             <label class="block text-sm">
                 Täze parol
-                <input v-model="password.password" type="password" minlength="8" required class="mt-1 w-full rounded-xl border p-3" />
+                <input v-model="password.password" type="password" minlength="8" required
+                    class="mt-1 w-full rounded-xl border p-3" />
             </label>
             <label class="block text-sm">
                 Täze paroly gaýtalaň
-                <input v-model="password.password_confirmation" type="password" required class="mt-1 w-full rounded-xl border p-3" />
+                <input v-model="password.password_confirmation" type="password" required
+                    class="mt-1 w-full rounded-xl border p-3" />
             </label>
-            <button type="submit" class="rounded-xl bg-emerald-700 px-5 py-3 text-white transition hover:bg-emerald-800">
+            <button type="submit"
+                class="rounded-xl bg-emerald-700 px-5 py-3 text-white transition hover:bg-emerald-800">
                 Paroly üýtget
             </button>
         </form>

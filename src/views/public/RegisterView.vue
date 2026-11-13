@@ -1,3 +1,35 @@
+<script setup>
+import { ref } from 'vue'
+import { useRouter } from 'vue-router'
+import api from '@/services/api'
+
+const router = useRouter()
+
+const form = ref({
+    name: '',
+    email: '',
+    password: '',
+    password_confirmation: ''
+})
+
+const loading = ref(false)
+const errorMessage = ref('')
+
+const handleRegister = async () => {
+    loading.value = true
+    errorMessage.value = ''
+
+    try {
+        await api.register(form.value)
+        router.push('/login')
+    } catch (error) {
+        errorMessage.value = error.response?.data?.message || 'Hasaba ýazylmakda ýalňyşlyk ýüze çykdy!'
+    } finally {
+        loading.value = false
+    }
+}
+</script>
+
 <template>
     <div class="min-h-[85vh] flex items-center justify-center px-4 py-12">
         <div
@@ -46,7 +78,7 @@
                 </div>
 
                 <button type="submit" :disabled="loading"
-                    class="w-full py-3 px-4 bg-blue-600 hover:bg-blue-700 text-white font-medium rounded-xl shadow-lg shadow-blue-500/30 transition-all disabled:opacity-50 text-sm cursor-pointer mt-2">
+                    class="w-full py-3 px-4 bg-emerald-600 hover:bg-emerald-700 text-white font-medium rounded-xl shadow-lg shadow-emerald-500/40 transition-all disabled:opacity-50 text-sm cursor-pointer mt-2">
                     {{ loading ? 'Hasap döredilýär...' : 'Hasaba ýazyl' }}
                 </button>
             </form>
@@ -60,35 +92,3 @@
         </div>
     </div>
 </template>
-
-<script setup>
-import { ref } from 'vue'
-import { useRouter } from 'vue-router'
-import api from '@/services/api'
-
-const router = useRouter()
-
-const form = ref({
-    name: '',
-    email: '',
-    password: '',
-    password_confirmation: ''
-})
-
-const loading = ref(false)
-const errorMessage = ref('')
-
-const handleRegister = async () => {
-    loading.value = true
-    errorMessage.value = ''
-
-    try {
-        await api.register(form.value)
-        router.push('/login')
-    } catch (error) {
-        errorMessage.value = error.response?.data?.message || 'Hasaba ýazylmakda ýalňyşlyk ýüze çykdy!'
-    } finally {
-        loading.value = false
-    }
-}
-</script>
