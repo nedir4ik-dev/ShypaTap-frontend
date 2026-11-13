@@ -83,7 +83,6 @@ const handleRegister = async () => {
     errorMessage.value = ''
 
     try {
-        // Laravel backend /api/register endpointine maglumat ugradyp baza ýazylýar
         await api.register(form.value)
         router.push('/login')
     } catch (error) {

@@ -3,7 +3,6 @@
         class="bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800 rounded-2xl p-5 shadow-sm hover:shadow-md transition-all">
         <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-4">
 
-            <!-- Doctor & Clinic Info -->
             <div class="flex items-start space-x-4">
                 <div
                     class="w-12 h-12 rounded-xl bg-blue-100 dark:bg-blue-950/50 flex items-center justify-center text-blue-600 dark:text-blue-400 font-bold text-lg shrink-0">
@@ -22,7 +21,6 @@
                 </div>
             </div>
 
-            <!-- Date, Time & Status -->
             <div class="flex flex-row sm:flex-col items-center sm:items-end justify-between sm:justify-center gap-2">
                 <div class="flex items-center space-x-1.5 text-sm font-medium text-slate-700 dark:text-slate-300">
                     <svg xmlns="http://www.w3.org/2000/svg" class="w-4 h-4 text-slate-400" fill="none"
@@ -33,7 +31,6 @@
                     <span>{{ appointment.date }} | {{ appointment.startTime }}</span>
                 </div>
 
-                <!-- Status Badge -->
                 <span :class="['text-xs px-3 py-1 rounded-full font-medium', getStatusClass(appointment.status)]">
                     {{ getStatusText(appointment.status) }}
                 </span>
@@ -41,7 +38,6 @@
 
         </div>
 
-        <!-- Actions (Cancel Button if Pending / Confirmed) -->
         <div v-if="canCancel" class="mt-4 pt-4 border-t border-slate-100 dark:border-slate-800 flex justify-end">
             <button @click="$emit('cancel', appointment.id)"
                 class="px-4 py-1.5 text-xs font-medium text-red-600 dark:text-red-400 hover:bg-red-50 dark:hover:bg-red-950/30 rounded-lg transition-colors">
@@ -58,13 +54,11 @@ const props = defineProps({
     appointment: {
         type: Object,
         required: true,
-        // mysal üçin: { id: 1, doctorName: 'Dr. Serdar', specialization: 'Kardiolog', clinicName: 'Central Clinic', date: '2026-11-15', startTime: '10:00', status: 'Confirmed' }
     }
 })
 
 defineEmits(['cancel'])
 
-// Dokumentasiýadaky statuslara laýyklykda reňkler
 const getStatusClass = (status) => {
     switch (status) {
         case 'confirmed':

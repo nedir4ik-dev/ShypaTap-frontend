@@ -1,9 +1,8 @@
 <template>
   <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8 space-y-16">
-
-    <!-- Hero Section with Liquid Glassmorphism -->
-    <section
-      class="relative overflow-hidden bg-linear-to-br from-emerald-700 via-teal-800 to-slate-900 rounded-3xl p-8 md:p-14 text-white shadow-2xl border border-white/10 flex flex-col lg:flex-row items-center justify-between gap-10">
+    <section class="relative overflow-hidden bg-linear-to-br from-emerald-700 via-teal-800
+       to-slate-900 rounded-3xl p-8 md:p-14 text-white shadow-2xl border border-white/10 
+       flex flex-col lg:flex-row items-center justify-between gap-10">
 
       <div class="absolute -top-24 -right-24 w-96 h-96 bg-emerald-400/20 rounded-full blur-3xl pointer-events-none">
       </div>
@@ -11,8 +10,8 @@
       </div>
 
       <div class="max-w-xl space-y-6 relative z-10">
-        <span
-          class="inline-flex items-center gap-2 bg-white/15 backdrop-blur-md text-emerald-100 text-xs font-semibold px-4 py-1.5 rounded-full uppercase tracking-wider border border-white/20">
+        <span class="inline-flex items-center gap-2 bg-white/15 backdrop-blur-md text-emerald-100
+           text-xs font-semibold px-4 py-1.5 rounded-full uppercase tracking-wider border border-white/20">
           <span class="w-2 h-2 rounded-full bg-emerald-300 animate-ping"></span>
           Onlaýn Lukman Kabul Edişi
         </span>
@@ -25,23 +24,21 @@
           Nobat garaşyp wagt ýitirmäň. Häzir tejribeli lukmany we klinikany saýlap, boş wagtyňyza göni onlaýn bron ediň.
         </p>
 
-        <!-- Search Box -->
-        <div
-          class="bg-white/90 dark:bg-slate-900/90 backdrop-blur-xl p-2 rounded-2xl shadow-xl border border-white/40 dark:border-slate-700/60 flex flex-col sm:flex-row gap-2">
+        <div class="bg-white/90 dark:bg-slate-900/90 backdrop-blur-xl p-2 rounded-2xl shadow-xl
+           border border-white/40 dark:border-slate-700/60 flex flex-col sm:flex-row gap-2">
           <div class="flex items-center gap-3 px-4 py-2.5 flex-1 text-slate-700 dark:text-slate-200">
             <i class="ti ti-search text-xl text-emerald-600 shrink-0"></i>
-            <input v-model="searchQuery" type="text" placeholder="Lukmanyň ady, hünäri ýa-da klinika..."
-              class="w-full bg-transparent focus:outline-none text-sm text-slate-900 dark:text-slate-100 placeholder-slate-400"
-              @keyup.enter="handleSearch">
+            <input v-model="searchQuery" type="text" placeholder="Lukmanyň ady, hünäri ýa-da klinika..." class="w-full bg-transparent focus:outline-none text-sm text-slate-900 dark:text-slate-100
+               placeholder-slate-400" @keyup.enter="handleSearch">
           </div>
           <button @click="handleSearch"
-            class="bg-emerald-600 hover:bg-emerald-500 text-white font-semibold px-7 py-3 rounded-xl transition-all text-sm flex items-center justify-center gap-2 shadow-lg shadow-emerald-900/30 cursor-pointer">
+            class="bg-emerald-600 hover:bg-emerald-500 text-white font-semibold px-7 py-3 rounded-xl
+          transition-all text-sm flex items-center justify-center gap-2 shadow-lg shadow-emerald-900/30 cursor-pointer">
             <i class="ti ti-search text-lg"></i> Gözlemek
           </button>
         </div>
       </div>
 
-      <!-- Hero Visual Card -->
       <div class="w-full lg:w-5/12 flex justify-center relative z-10">
         <div
           class="w-full max-w-sm bg-white/10 backdrop-blur-xl rounded-3xl p-6 border border-white/20 shadow-2xl space-y-5">
@@ -72,7 +69,6 @@
       </div>
     </section>
 
-    <!-- Popular Specializations (Splide Slider with Loop & Drag Free) -->
     <section class="space-y-6">
       <div class="flex items-center justify-between">
         <div>
@@ -84,7 +80,6 @@
         </router-link>
       </div>
 
-      <!-- Splide Specializations Container -->
       <div class="splide spec-slider">
         <div class="splide__track">
           <ul class="splide__list">
@@ -103,7 +98,6 @@
       </div>
     </section>
 
-    <!-- Featured Doctors (Splide Slider with Loop & Drag Free) -->
     <section v-if="doctors.length > 0" class="space-y-6">
       <div class="flex items-center justify-between">
         <div>
@@ -115,7 +109,6 @@
         </router-link>
       </div>
 
-      <!-- Splide Doctors Container -->
       <div class="splide doctor-slider">
         <div class="splide__track">
           <ul class="splide__list">
@@ -164,7 +157,6 @@
       </div>
     </section>
 
-    <!-- Clinics Section -->
     <section v-if="clinics.length > 0" class="space-y-6">
       <div class="flex items-center justify-between">
         <div>
@@ -236,10 +228,8 @@ onMounted(async () => {
     doctors.value = docRes.data.data || docRes.data || []
     clinics.value = clinicRes.data.data || clinicRes.data || []
 
-    // Maglumatlar API-den gelip, DOM ýüklenenden soň Splide sliderleri işledýäris
     await nextTick()
 
-    // 1. Hünärler üçin Splide slider (drag free we loop bilen)
     if (document.querySelector('.spec-slider')) {
       new Splide('.spec-slider', {
         type: 'loop',
@@ -260,7 +250,6 @@ onMounted(async () => {
       }).mount()
     }
 
-    // 2. Lukmanlar üçin Splide slider (drag free we loop bilen)
     if (document.querySelector('.doctor-slider')) {
       new Splide('.doctor-slider', {
         type: 'loop',

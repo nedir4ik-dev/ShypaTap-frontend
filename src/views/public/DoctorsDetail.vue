@@ -83,13 +83,11 @@ async function book() {
 <template>
     <section class="mx-auto max-w-7xl px-4 py-10">
 
-        <!-- Loading State -->
         <div v-if="loading" class="py-20 text-center text-slate-500">
             <i class="ti ti-loader animate-spin text-4xl text-emerald-600 mb-2"></i>
             <p>Lukman maglumatlary ýüklenýär...</p>
         </div>
 
-        <!-- Error State -->
         <div v-else-if="!doctor"
             class="bg-white/70 dark:bg-slate-900/70 backdrop-blur-md p-10 rounded-3xl border border-slate-200/60 dark:border-slate-800/60 text-center space-y-4">
             <i class="ti ti-alert-circle text-5xl text-red-500"></i>
@@ -100,14 +98,11 @@ async function book() {
             </router-link>
         </div>
 
-        <!-- Main Content Grid -->
         <div v-else class="grid grid-cols-1 lg:grid-cols-3 gap-8">
 
-            <!-- Left & Center: Doctor Info & Clinics -->
             <article
                 class="bg-white/70 dark:bg-slate-900/70 backdrop-blur-xl p-8 rounded-3xl border border-slate-200/60 dark:border-slate-800/60 shadow-xl lg:col-span-2 space-y-8">
 
-                <!-- Header Profile -->
                 <div class="flex flex-col sm:flex-row items-center sm:items-start gap-6 text-center sm:text-left">
                     <img v-if="doctor.photo_url" :src="doctor.photo_url"
                         class="h-28 w-28 rounded-2xl object-cover shadow-lg border border-white/20"
@@ -141,7 +136,6 @@ async function book() {
                     </div>
                 </div>
 
-                <!-- Biography & Education -->
                 <div class="space-y-4 border-t border-slate-200/60 dark:border-slate-800 pt-6">
                     <div>
                         <h2 class="text-lg font-bold text-slate-900 dark:text-slate-100 mb-2 flex items-center gap-2">
@@ -161,7 +155,6 @@ async function book() {
                     </div>
                 </div>
 
-                <!-- Clinic Selector -->
                 <div class="space-y-4 border-t border-slate-200/60 dark:border-slate-800 pt-6">
                     <h2 class="text-lg font-bold text-slate-900 dark:text-slate-100 flex items-center gap-2">
                         <i class="ti ti-building-hospital text-emerald-600"></i> Kabul geçiriljek klinikany saýlaň
@@ -182,7 +175,6 @@ async function book() {
 
             </article>
 
-            <!-- Right Sidebar: Booking Form -->
             <aside
                 class="bg-white/70 dark:bg-slate-900/70 backdrop-blur-xl h-fit rounded-3xl p-6 border border-slate-200/60 dark:border-slate-800/60 shadow-xl space-y-6">
                 <div class="flex items-center gap-3 border-b border-slate-200/60 dark:border-slate-800 pb-4">
@@ -196,7 +188,6 @@ async function book() {
                     </div>
                 </div>
 
-                <!-- Date Picker -->
                 <div class="space-y-1.5">
                     <label class="block text-xs font-semibold text-slate-700 dark:text-slate-300">Sene saýlaň</label>
                     <div class="relative">
@@ -205,7 +196,6 @@ async function book() {
                     </div>
                 </div>
 
-                <!-- Available Slots -->
                 <div class="space-y-2">
                     <p class="text-xs font-semibold text-slate-700 dark:text-slate-300">Boş sagatlar</p>
 
@@ -231,7 +221,6 @@ async function book() {
                     </div>
                 </div>
 
-                <!-- Patient Details Form -->
                 <template v-if="selected">
                     <div class="space-y-4 pt-2 border-t border-slate-200/60 dark:border-slate-800 animate-fadeIn">
                         <div class="space-y-1">
@@ -252,13 +241,11 @@ async function book() {
                     </div>
                 </template>
 
-                <!-- Status Message -->
                 <p v-if="message" class="text-xs p-3 rounded-xl font-medium"
                     :class="success ? 'bg-emerald-50 text-emerald-700 dark:bg-emerald-950/50 dark:text-emerald-300' : 'bg-red-50 text-red-600 dark:bg-red-950/50 dark:text-red-300'">
                     {{ message }}
                 </p>
 
-                <!-- Submit Button -->
                 <button @click="book" :disabled="!selected || !clinic || !phone || booking"
                     class="w-full rounded-2xl bg-emerald-600 hover:bg-emerald-500 px-4 py-3.5 font-semibold text-white shadow-lg shadow-emerald-600/30 transition disabled:opacity-40 disabled:cursor-not-allowed cursor-pointer flex items-center justify-center gap-2">
                     <i v-if="booking" class="ti ti-loader animate-spin text-lg"></i>

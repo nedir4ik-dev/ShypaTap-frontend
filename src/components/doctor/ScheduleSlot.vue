@@ -5,9 +5,7 @@
             ? 'bg-blue-600 border-blue-600 text-white shadow-lg shadow-blue-500/30'
             : slot.isBooked
                 ? 'bg-slate-100 dark:bg-slate-900/50 border-slate-200 dark:border-slate-800 text-slate-400 dark:text-slate-600 cursor-not-allowed'
-                : 'bg-white dark:bg-slate-900 border-slate-200 dark:border-slate-800 hover:border-blue-500 dark:hover:border-blue-500 text-slate-700 dark:text-slate-200'
-    ]">
-        <!-- Time Range -->
+                : 'bg-white dark:bg-slate-900 border-slate-200 dark:border-slate-800 hover:border-blue-500 dark:hover:border-blue-500 text-slate-700 dark:text-slate-200']">
         <div class="flex items-center space-x-2">
             <svg xmlns="http://www.w3.org/2000/svg" class="w-4 h-4 opacity-70" fill="none" viewBox="0 0 24 24"
                 stroke="currentColor">
@@ -19,7 +17,6 @@
             </span>
         </div>
 
-        <!-- Status Badge -->
         <div>
             <span v-if="slot.isBooked"
                 class="text-xs px-2.5 py-1 rounded-lg bg-red-100 dark:bg-red-950/50 text-red-600 dark:text-red-400 font-medium">
@@ -41,7 +38,6 @@ const props = defineProps({
     slot: {
         type: Object,
         required: true,
-        // mysal üçin: { id: 1, startTime: '09:00', endTime: '09:30', isBooked: false }
     },
     isSelected: {
         type: Boolean,
