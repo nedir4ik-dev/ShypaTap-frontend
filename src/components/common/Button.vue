@@ -5,7 +5,6 @@
         sizes[size],
         (disabled || loading) ? 'opacity-50 cursor-not-allowed' : 'cursor-pointer'
     ]" @click="$emit('click')">
-        <!-- Loading Spinner -->
         <svg v-if="loading" class="animate-spin -ml-1 mr-2 h-4 w-4 text-current" fill="none" viewBox="0 0 24 24">
             <circle class="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" stroke-width="4"></circle>
             <path class="opacity-75" fill="currentColor"
@@ -19,8 +18,8 @@
 <script setup>
 defineProps({
     type: { type: String, default: 'button' },
-    variant: { type: String, default: 'primary' }, // primary, secondary, danger, outline
-    size: { type: String, default: 'md' }, // sm, md, lg
+    variant: { type: String, default: 'primary' },
+    size: { type: String, default: 'md' },
     disabled: { type: Boolean, default: false },
     loading: { type: Boolean, default: false }
 })

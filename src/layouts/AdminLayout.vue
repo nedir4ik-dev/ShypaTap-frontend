@@ -1,3 +1,35 @@
+<script setup>
+import { ref, onMounted } from 'vue'
+import { useRouter } from 'vue-router'
+import { useAuthStore } from '@/stores/authStore'
+const auth = useAuthStore()
+const router = useRouter()
+const logout = async () => { await auth.logout(); router.push('/') }
+const isDarkMode = ref(false)
+const isSidebarOpen = ref(false)
+
+onMounted(() => {
+  const savedTheme = localStorage.getItem('theme')
+  if (savedTheme === 'dark' || (!savedTheme && window.matchMedia('(prefers-color-scheme: dark)').matches)) {
+    isDarkMode.value = true
+    document.documentElement.classList.add('dark')
+  } else {
+    isDarkMode.value = false
+    document.documentElement.classList.remove('dark')
+  }
+})
+
+const toggleDarkMode = () => {
+  isDarkMode.value = !isDarkMode.value
+  if (isDarkMode.value) {
+    document.documentElement.classList.add('dark')
+    localStorage.setItem('theme', 'dark')
+  } else {
+    document.documentElement.classList.remove('dark')
+  }
+}
+</script>
+
 <template>
   <div :class="{ 'dark': isDarkMode }"
     class="min-h-screen bg-gray-100 dark:bg-gray-900 text-gray-900 dark:text-gray-100 flex transition-colors duration-300">
@@ -15,7 +47,6 @@
         </button>
       </div>
 
-      <!-- Navigation Links -->
       <nav class="flex-1 p-4 space-y-1 overflow-y-auto">
         <router-link to="/admin/dashboard"
           class="flex items-center gap-3 px-4 py-3 text-sm font-medium rounded-xl hover:bg-gray-100 dark:hover:bg-gray-700 transition"
@@ -53,7 +84,6 @@
         </router-link>
       </nav>
 
-      <!-- Sidebar Footer (User info & Logout) -->
       <div class="p-4 border-t border-gray-200 dark:border-gray-700 flex items-center justify-between">
         <div class="flex items-center gap-3">
           <div
@@ -72,16 +102,10 @@
       </div>
     </aside>
 
-    <!-- Backdrop for mobile sidebar -->
     <div v-if="isSidebarOpen" @click="isSidebarOpen = false" class="fixed inset-0 bg-black/50 z-30 md:hidden"></div>
-
-    <!-- Main Content Area -->
     <div class="flex-1 flex flex-col min-w-0">
-
-      <!-- Top Navbar -->
       <header
         class="h-16 bg-white dark:bg-gray-800 border-b border-gray-200 dark:border-gray-700 px-4 md:px-8 flex items-center justify-between">
-        <!-- Mobile Menu Toggle -->
         <button @click="isSidebarOpen = !isSidebarOpen" class="md:hidden text-gray-600 dark:text-gray-300 p-2">
           <i class="ti ti-menu-2 text-2xl"></i>
         </button>
@@ -90,9 +114,7 @@
           Dolandyryş Paneli
         </h1>
 
-        <!-- Header Actions -->
         <div class="flex items-center gap-3">
-          <!-- Dark/Light Mode Toggle -->
           <button @click="toggleDarkMode"
             class="p-2 rounded-xl bg-gray-100 dark:bg-gray-700 text-gray-700 dark:text-gray-200 hover:bg-gray-200 dark:hover:bg-gray-600 transition">
             <i v-if="isDarkMode" class="ti ti-sun text-xl"></i>
@@ -101,7 +123,6 @@
         </div>
       </header>
 
-      <!-- Dynamic Page Content -->
       <main class="flex-1 p-4 md:p-8 overflow-y-auto">
         <router-view />
       </main>
@@ -109,35 +130,3 @@
     </div>
   </div>
 </template>
-
-<script setup>
-import { ref, onMounted } from 'vue'
-import { useRouter } from 'vue-router'
-import { useAuthStore } from '@/stores/authStore'
-const auth = useAuthStore()
-const router = useRouter()
-const logout = async () => { await auth.logout(); router.push('/') }
-const isDarkMode = ref(false)
-const isSidebarOpen = ref(false)
-
-onMounted(() => {
-  const savedTheme = localStorage.getItem('theme')
-  if (savedTheme === 'dark' || (!savedTheme && window.matchMedia('(prefers-color-scheme: dark)').matches)) {
-    isDarkMode.value = true
-    document.documentElement.classList.add('dark')
-  } else {
-    isDarkMode.value = false
-    document.documentElement.classList.remove('dark')
-  }
-})
-
-const toggleDarkMode = () => {
-  isDarkMode.value = !isDarkMode.value
-  if (isDarkMode.value) {
-    document.documentElement.classList.add('dark')
-    localStorage.setItem('theme', 'dark')
-  } else {
-    document.documentElement.classList.remove('dark')
-  }
-}
-</script>

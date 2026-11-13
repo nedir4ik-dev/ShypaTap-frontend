@@ -19,7 +19,7 @@ const routes = [
     children: [
       { path: "", name: "home", component: HomeView },
       { path: "doctors", name: "doctors", component: DoctorsView },
-      { path: "clinics", redirect: "/doctors" },
+      { path: "clinics", redirect: "/clinics" },
       { path: "doctors/:id", name: "doctor-detail", component: DoctorsDetail },
       {
         path: "login",

@@ -44,8 +44,8 @@
 
 <script setup>
 defineProps({
-    modelValue: { type: Number, required: true }, // Aktiw sahypa (v-model üçin)
-    totalPages: { type: Number, required: true }  // Jemi sahypa sany
+    modelValue: { type: Number, required: true },
+    totalPages: { type: Number, required: true } 
 })
 
 defineEmits(['page-change'])

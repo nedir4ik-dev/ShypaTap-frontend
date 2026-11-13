@@ -6,5 +6,4 @@
 </template>
 
 <script setup>
-// Umumy card wrapper
 </script>

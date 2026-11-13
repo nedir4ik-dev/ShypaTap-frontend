@@ -4,7 +4,6 @@
         <div
             class="bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800 rounded-2xl w-full max-w-lg overflow-hidden shadow-2xl">
 
-            <!-- Modal Header -->
             <div class="flex items-center justify-between px-6 py-4 border-b border-slate-200 dark:border-slate-800">
                 <h3 class="text-lg font-semibold text-slate-900 dark:text-slate-100">
                     <slot name="title">Maglumat</slot>
@@ -19,12 +18,10 @@
                 </button>
             </div>
 
-            <!-- Modal Body -->
             <div class="p-6 text-slate-600 dark:text-slate-300">
                 <slot />
             </div>
 
-            <!-- Modal Footer -->
             <div v-if="$slots.footer"
                 class="px-6 py-4 bg-slate-50 dark:bg-slate-950/50 border-t border-slate-200 dark:border-slate-800 flex justify-end space-x-3">
                 <slot name="footer" />
