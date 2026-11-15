@@ -104,7 +104,7 @@ async function book() {
                 class="bg-white/70 dark:bg-slate-900/70 backdrop-blur-xl p-8 rounded-3xl border border-slate-200/60 dark:border-slate-800/60 shadow-xl lg:col-span-2 space-y-8">
 
                 <div class="flex flex-col sm:flex-row items-center sm:items-start gap-6 text-center sm:text-left">
-                    <img v-if="doctor.photo_url" :src="doctor.photo_url"
+                    <img v-if="doctor.user?.avatar_url" :src="doctor.user?.avatar_url"
                         class="h-28 w-28 rounded-2xl object-cover shadow-lg border border-white/20"
                         alt="Lukmanyň suraty" />
                     <div v-else

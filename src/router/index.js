@@ -10,6 +10,7 @@ import PatientDashboard from "@/views/patient/DashboardView.vue";
 import PatientAppointments from "@/views/patient/Appointments.vue";
 import DoctorDashboard from "@/views/doctor/DashboardView.vue";
 import DoctorSchedule from "@/views/doctor/ScheduleView.vue";
+import DoctorAppointments from "@/views/doctor/AppointmentsView.vue";
 import RoleDashboard from "@/views/shared/RoleDashboard.vue";
 import AccountView from "@/views/shared/AccountView.vue";
 import ClinicsView from "@/views/public/ClinicsView.vue";
@@ -46,19 +47,16 @@ const routes = [
         meta: { requiresAuth: true, role: "patient" },
       },
       {
-        path: "/patient/profile",
+        path: "patient/profile",
         component: AccountView,
         props: { mode: "profile" },
+        meta: { requiresAuth: true, role: "patient" },
       },
       {
-        path: "/patient/password",
+        path: "patient/password",
         component: AccountView,
         props: { mode: "password" },
-      },
-      {
-        path: "/patient/notifications",
-        component: AccountView,
-        props: { mode: "notifications" },
+        meta: { requiresAuth: true, role: "patient" },
       },
       {
         path: "patient/notifications",
@@ -77,15 +75,26 @@ const routes = [
         meta: { requiresAuth: true, role: "doctor" },
       },
       {
+        path: "doctor/appointments",
+        component: DoctorAppointments,
+        meta: { requiresAuth: true, role: "doctor" },
+      },
+      {
         path: "doctor/notifications",
         component: AccountView,
         props: { mode: "notifications" },
         meta: { requiresAuth: true, role: "doctor" },
       },
       {
-        path: "/doctor/profile",
+        path: "doctor/profile",
         component: DoctorProfileView,
         meta: { requiresAuth: true, role: "doctor" },
+      },
+      {
+        path: "receptionist/profile",
+        component: AccountView,
+        props: { mode: "profile" },
+        meta: { requiresAuth: true, role: "receptionist" },
       },
       {
         path: "receptionist/:section?",
@@ -96,16 +105,6 @@ const routes = [
         path: "receptionist/dashboard",
         component: RoleDashboard,
         meta: { requiresAuth: true, role: "receptionist" },
-      },
-      {
-        path: "admin/:section?",
-        component: RoleDashboard,
-        meta: { requiresAuth: true, role: "admin" },
-      },
-      {
-        path: "admin/dashboard",
-        component: RoleDashboard,
-        meta: { requiresAuth: true, role: "admin" },
       },
     ],
   },

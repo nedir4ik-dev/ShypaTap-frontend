@@ -62,7 +62,6 @@
                 <th class="p-3">Ady / Maglumat</th>
                 <th class="p-3" v-if="section === 'appointments'">Sene / Wagt</th>
                 <th class="p-3">Ýagdaýy</th>
-                <th class="p-3 text-right" v-if="section === 'appointments'">Hereketler</th>
               </tr>
             </thead>
             <tbody>
@@ -75,19 +74,12 @@
                 </td>
                 <td class="p-3" v-if="section === 'appointments'">
                   {{ row.appointment_date?.split('T')[0] }} <span class="text-emerald-600 font-mono">{{ row.start_time
-                    }}</span>
+                  }}</span>
                 </td>
                 <td class="p-3">
                   <span class="px-3 py-1 rounded-full text-xs font-semibold" :class="getStatusClass(row.status)">
                     {{ statusLabels[row.status] || row.status || (row.is_active ? 'Işjeň' : '—') }}
                   </span>
-                </td>
-                <td class="p-3 text-right space-x-2" v-if="section === 'appointments'">
-                  <button v-if="row.status === 'pending'" @click="changeStatus(row.id, 'confirmed')"
-                    class="px-3 py-1 bg-emerald-100 hover:bg-emerald-200 text-emerald-800 dark:bg-emerald-950 dark:text-emerald-300 rounded-xl text-xs font-semibold">Tassykla</button>
-                  <button v-if="row.status === 'pending'" @click="changeStatus(row.id, 'rejected')"
-                    class="px-3 py-1 bg-red-100 hover:bg-red-200 text-red-800 dark:bg-red-950 dark:text-red-300 rounded-xl text-xs font-semibold">Ret
-                    et</button>
                 </td>
               </tr>
             </tbody>
@@ -187,15 +179,6 @@ async function load() {
     error.value = e.response?.data?.message || 'Maglumatlary alyp bolmady. API rugsadyny ýa-da serweri barlaň.'
   } finally {
     loading.value = false
-  }
-}
-
-async function changeStatus(id, newStatus) {
-  try {
-    await api.client.patch(`/receptionist/appointments/${id}/status`, { status: newStatus })
-    await load()
-  } catch (e) {
-    alert('Statusy üýtgedip bolmady.')
   }
 }
 

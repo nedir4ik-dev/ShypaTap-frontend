@@ -12,7 +12,7 @@ defineProps({
         class="bg-white/70 dark:bg-slate-900/70 backdrop-blur-md border border-slate-200/50 dark:border-slate-800/50 rounded-3xl p-6 shadow-lg hover:shadow-xl transition-all flex flex-col justify-between">
         <div>
             <div class="flex items-center space-x-4 mb-4">
-                <img v-if="doctor.photo" :src="doctor.photo" :alt="doctor.name"
+                <img v-if="doctor.user?.avatar_url" :src="doctor.user?.avatar_url" :alt="doctor.name"
                     class="h-14 w-14 rounded-2xl object-cover" />
                 <div v-else
                     class="flex h-14 w-14 items-center justify-center rounded-2xl bg-emerald-100 text-xl font-bold text-emerald-800">

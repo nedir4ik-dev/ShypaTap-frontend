@@ -3,6 +3,7 @@ import { computed, onMounted, ref, watch } from 'vue';
 import { useRoute } from 'vue-router';
 import { useAuthStore } from '@/stores/authStore';
 import api from '@/services/api';
+import AvatarEditor from '@/components/common/AvatarEditor.vue';
 
 const props = defineProps({
     mode: { type: String, default: 'profile' }
@@ -29,11 +30,15 @@ const notifications = ref([]);
 const message = ref('');
 const error = ref('');
 
+function updateAuthUser(user) {
+    auth.user = user;
+    localStorage.setItem('user', JSON.stringify(user));
+}
+
 async function saveProfile() {
     try {
         const { data } = await api.updateProfile(profile.value);
-        auth.user = data.user;
-        localStorage.setItem('user', JSON.stringify(data.user));
+        updateAuthUser(data.user);
         message.value = data.message;
         error.value = '';
     } catch (e) {
@@ -96,24 +101,27 @@ watch(mode, (newMode) => {
             {{ error }}
         </p>
 
-        <form v-if="mode === 'profile'" @submit.prevent="saveProfile" class="glass-card space-y-4 p-6">
-            <label class="block text-sm">
-                Ady
-                <input v-model="profile.name" required class="mt-1 w-full rounded-xl border p-3" />
-            </label>
-            <label class="block text-sm">
-                E-poçta
-                <input v-model="profile.email" type="email" required class="mt-1 w-full rounded-xl border p-3" />
-            </label>
-            <label class="block text-sm">
-                Telefon
-                <input v-model="profile.phone" class="mt-1 w-full rounded-xl border p-3" />
-            </label>
-            <button type="submit"
-                class="rounded-xl bg-emerald-700 px-5 py-3 text-white transition hover:bg-emerald-800">
-                Maglumatlary sakla
-            </button>
-        </form>
+        <div v-if="mode === 'profile'" class="glass-card space-y-5 p-6">
+            <AvatarEditor :user="auth.user || profile" @updated="updateAuthUser" />
+            <form @submit.prevent="saveProfile" class="space-y-4">
+                <label class="block text-sm">
+                    Ady
+                    <input v-model="profile.name" required class="mt-1 w-full rounded-xl border p-3" />
+                </label>
+                <label class="block text-sm">
+                    E-poçta
+                    <input v-model="profile.email" type="email" required class="mt-1 w-full rounded-xl border p-3" />
+                </label>
+                <label class="block text-sm">
+                    Telefon
+                    <input v-model="profile.phone" class="mt-1 w-full rounded-xl border p-3" />
+                </label>
+                <button type="submit"
+                    class="rounded-xl bg-emerald-700 px-5 py-3 text-white transition hover:bg-emerald-800">
+                    Maglumatlary sakla
+                </button>
+            </form>
+        </div>
 
         <form v-else-if="mode === 'password'" @submit.prevent="changePassword" class="glass-card space-y-4 p-6">
             <label class="block text-sm">

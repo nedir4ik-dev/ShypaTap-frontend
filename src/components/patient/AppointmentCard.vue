@@ -85,6 +85,6 @@ const getStatusText = (status) => {
 }
 
 const canCancel = computed(() => {
-    return props.appointment.status === 'Pending' || props.appointment.status === 'Confirmed'
+    return ['pending', 'confirmed'].includes(String(props.appointment.status || '').toLowerCase())
 })
 </script>

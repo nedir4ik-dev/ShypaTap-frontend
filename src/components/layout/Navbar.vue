@@ -35,6 +35,8 @@ const closeMenu = () => {
     mobileMenuOpen.value = false;
 };
 
+const profilePath = computed(() => ({ patient: '/patient/profile', doctor: '/doctor/profile', receptionist: '/receptionist/profile' }[auth.user?.role] || auth.dashboardPath()));
+
 const userInitial = computed(() => {
     return auth.user?.name ? auth.user.name.charAt(0).toUpperCase() : 'Ş';
 });
@@ -42,7 +44,7 @@ const userInitial = computed(() => {
 
 <template>
     <header
-        class="sticky top-0 z-50 border-b border-white/40 bg-white/40 shadow-lg backdrop-blur-md dark:border-slate-800/60 dark:bg-slate-950/40 transition-all">
+        class="sticky top-0 z-50 border-b border-white/40 bg-white/40 shadow-lg backdrop-blur-md dark:border-slate-800/60 dark:bg-slate-900/30 transition-all">
         <div class="mx-auto flex h-16 max-w-7xl items-center justify-between px-4 sm:px-6 lg:px-8">
 
             <router-link to="/" @click="closeMenu" class="flex items-center gap-3 group">
@@ -77,9 +79,11 @@ const userInitial = computed(() => {
 
                 <div class="hidden sm:flex items-center gap-2">
                     <template v-if="auth.token">
-                        <router-link :to="auth.dashboardPath ? auth.dashboardPath() : '/patient/dashboard'"
+                        <router-link :to="profilePath"
                             class="flex items-center gap-2.5 rounded-2xl px-3 py-1.5 text-sm font-semibold text-slate-700 dark:text-slate-200 hover:bg-white/60 dark:hover:bg-slate-900/60 transition border border-slate-200/60 dark:border-slate-800">
-                            <span
+                            <img v-if="auth.user?.avatar_url" :src="auth.user.avatar_url" alt="Profil"
+                                class="h-7 w-7 rounded-full object-cover">
+                            <span v-else
                                 class="flex h-7 w-7 items-center justify-center rounded-full bg-emerald-600 text-xs font-bold text-white shadow-md">
                                 {{ userInitial }}
                             </span>
@@ -130,14 +134,15 @@ const userInitial = computed(() => {
             </nav>
             <div class="flex flex-col gap-2.5 pt-1">
                 <template v-if="auth.token">
-                    <router-link :to="auth.dashboardPath ? auth.dashboardPath() : '/patient/dashboard'"
-                        @click="closeMenu"
+                    <router-link :to="profilePath" @click="closeMenu"
                         class="flex items-center gap-3 w-full py-3 px-4 rounded-2xl bg-emerald-50 dark:bg-slate-900 text-emerald-700 dark:text-emerald-400 font-semibold text-sm shadow-sm">
-                        <span
+                        <img v-if="auth.user?.avatar_url" :src="auth.user.avatar_url" alt="Profil"
+                            class="h-7 w-7 rounded-full object-cover">
+                        <span v-else
                             class="flex h-7 w-7 items-center justify-center rounded-full bg-emerald-600 text-xs font-bold text-white">
                             {{ userInitial }}
                         </span>
-                        Şahsy kabinet
+                        Şahsy profil
                     </router-link>
                     <button @click="signOut"
                         class="flex items-center justify-center gap-2 w-full py-3 px-4 text-center rounded-2xl bg-red-600 hover:bg-red-700 text-white font-semibold text-sm transition shadow-md">

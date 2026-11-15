@@ -1,11 +1,19 @@
 <script setup>
 import { ref, onMounted } from 'vue'
 import api from '@/services/api'
+import { useAuthStore } from '@/stores/authStore'
+import AvatarEditor from '@/components/common/AvatarEditor.vue'
 
+const auth = useAuthStore()
 const loading = ref(true)
 const updating = ref(false)
 const message = ref('')
 const success = ref(false)
+
+function updateAuthUser(user) {
+    auth.user = user
+    localStorage.setItem('user', JSON.stringify(user))
+}
 
 const form = ref({
     name: '',
@@ -43,6 +51,10 @@ const updateProfile = async () => {
     message.value = ''
     try {
         const { data } = await api.client.patch('/doctor/profile', form.value)
+        if (auth.user) {
+            auth.user = { ...auth.user, name: form.value.name, phone: form.value.phone }
+            localStorage.setItem('user', JSON.stringify(auth.user))
+        }
         success.value = true
         message.value = data.message || 'Üýtgeşmeler üstünlikli saklandy!'
     } catch (e) {
@@ -59,7 +71,7 @@ const updateProfile = async () => {
         <div class="flex items-center justify-between">
             <h1 class="text-3xl font-bold text-slate-900 dark:text-slate-100">Lukman Şahsy Profili</h1>
             <router-link to="/doctor/dashboard" class="text-sm font-semibold text-emerald-600 hover:underline">
-                &larr; Panelä gaýdyt
+                &larr; Panela dolan
             </router-link>
         </div>
 
@@ -72,6 +84,7 @@ const updateProfile = async () => {
                 {{ message }}
             </div>
 
+            <AvatarEditor :user="auth.user" @updated="updateAuthUser" />
             <form @submit.prevent="updateProfile" class="grid grid-cols-1 md:grid-cols-2 gap-6">
                 <div class="space-y-1.5">
                     <label class="block text-xs font-semibold text-slate-700 dark:text-slate-300">Doly adyňyz</label>

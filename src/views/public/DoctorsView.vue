@@ -29,7 +29,7 @@ onMounted(async () => {
             ...d,
             name: d.user?.name || d.name,
             clinic: d.clinics?.[0] || d.clinic,
-            photo: d.photo_url
+            photo: d.user?.avatar_url
         }))
         specializations.value = specRes.data.data || specRes.data || []
         clinics.value = clinicRes.data.data || clinicRes.data || []

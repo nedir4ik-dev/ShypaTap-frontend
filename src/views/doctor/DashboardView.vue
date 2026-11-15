@@ -1,6 +1,5 @@
 <template>
     <section class="mx-auto max-w-7xl px-4 py-10 space-y-10">
-        <!-- Welcome Banner -->
         <div
             class="bg-linear-to-br from-emerald-700 via-teal-800 to-slate-900 rounded-3xl p-8 text-white shadow-2xl relative overflow-hidden flex flex-col md:flex-row items-center justify-between gap-6">
             <div
@@ -28,9 +27,7 @@
             </div>
         </div>
 
-        <!-- Navigation Cards (Grid) -->
         <div class="grid gap-6 sm:grid-cols-2 lg:grid-cols-4">
-            <!-- Kabul Ýazgylary -->
             <router-link to="/doctor/appointments"
                 class="bg-white/70 dark:bg-slate-900/70 backdrop-blur-xl p-6 rounded-3xl border border-slate-200/60 dark:border-slate-800/60 shadow-xl hover:shadow-2xl transition-all group">
                 <div
@@ -42,7 +39,6 @@
                 </p>
             </router-link>
 
-            <!-- Iş Tertibi -->
             <router-link to="/doctor/schedule"
                 class="bg-white/70 dark:bg-slate-900/70 backdrop-blur-xl p-6 rounded-3xl border border-slate-200/60 dark:border-slate-800/60 shadow-xl hover:shadow-2xl transition-all group">
                 <div
@@ -54,7 +50,6 @@
                 </p>
             </router-link>
 
-            <!-- Şahsy Profil (Aýratyn sahypa ýa-da formere geçmek üçin) -->
             <router-link to="/doctor/profile"
                 class="bg-white/70 dark:bg-slate-900/70 backdrop-blur-xl p-6 rounded-3xl border border-slate-200/60 dark:border-slate-800/60 shadow-xl hover:shadow-2xl transition-all group">
                 <div
@@ -66,7 +61,6 @@
                 </p>
             </router-link>
 
-            <!-- Bildirişler -->
             <router-link to="/doctor/notifications"
                 class="bg-white/70 dark:bg-slate-900/70 backdrop-blur-xl p-6 rounded-3xl border border-slate-200/60 dark:border-slate-800/60 shadow-xl hover:shadow-2xl transition-all group">
                 <div
