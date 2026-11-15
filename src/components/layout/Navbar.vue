@@ -35,7 +35,7 @@ const closeMenu = () => {
     mobileMenuOpen.value = false;
 };
 
-const profilePath = computed(() => ({ patient: '/patient/profile', doctor: '/doctor/profile', receptionist: '/receptionist/profile' }[auth.user?.role] || auth.dashboardPath()));
+const profilePath = computed(() => ({ patient: '/patient/dashboard', doctor: '/doctor/dashboard', receptionist: '/receptionist/dashboard' }[auth.user?.role] || auth.dashboardPath()));
 
 const userInitial = computed(() => {
     return auth.user?.name ? auth.user.name.charAt(0).toUpperCase() : 'Ş';

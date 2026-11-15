@@ -94,8 +94,13 @@ watch(mode, (newMode) => {
             {{ mode === 'notifications' ? 'Bildirişler' : mode === 'password' ? 'Paroly üýtgetmek' : 'Şahsy profil' }}
         </h1>
 
-        <p v-if="message" class="rounded-xl bg-emerald-50 p-3 text-emerald-800">
+        <p v-if="message"
+            class="bg-emerald-50 dark:bg-emerald-500/10 border border-emerald-200 dark:border-emerald-500/30 text-emerald-800 dark:text-emerald-400 px-4 py-3 rounded-2xl text-sm flex items-center justify-between shadow-sm">
             {{ message }}
+            <button type="button" onclick="this.parentElement.remove()"
+                class="text-emerald-600 hover:text-emerald-800 dark:text-emerald-400">
+                <i class="ti ti-x text-lg"></i>
+            </button>
         </p>
         <p v-if="error" class="rounded-xl bg-red-50 p-3 text-red-700">
             {{ error }}
