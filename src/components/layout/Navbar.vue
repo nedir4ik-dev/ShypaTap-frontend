@@ -15,7 +15,10 @@ function apply(v) {
 }
 
 onMounted(() => {
-    apply(localStorage.getItem('theme') === 'dark');
+    const savedTheme = localStorage.getItem('theme') || 'system';
+    const prefersDark = window.matchMedia?.('(prefers-color-scheme: dark)').matches ?? false;
+    dark.value = savedTheme === 'dark' || (savedTheme === 'system' && prefersDark);
+    document.documentElement.classList.toggle('dark', dark.value);
     if (auth.token && !auth.user) {
         auth.fetchUser?.();
     }
@@ -36,6 +39,7 @@ const closeMenu = () => {
 };
 
 const profilePath = computed(() => ({ patient: '/patient/dashboard', doctor: '/doctor/dashboard', receptionist: '/receptionist/dashboard' }[auth.user?.role] || auth.dashboardPath()));
+const settingsPath = computed(() => ({ patient: '/patient/settings', doctor: '/doctor/settings', receptionist: '/receptionist/settings' }[auth.user?.role] || profilePath.value));
 
 const userInitial = computed(() => {
     return auth.user?.name ? auth.user.name.charAt(0).toUpperCase() : 'Ş';
@@ -44,7 +48,7 @@ const userInitial = computed(() => {
 
 <template>
     <header
-        class="sticky top-0 z-50 border-b border-white/40 bg-white/40 shadow-lg backdrop-blur-md dark:border-slate-800/60 dark:bg-slate-900/30 transition-all">
+        class="sticky top-0 z-50 border-b border-white/40 bg-white/40 shadow-lg backdrop-blur-sm dark:border-slate-800/60 dark:bg-slate-900/30 transition-all">
         <div class="mx-auto flex h-16 max-w-7xl items-center justify-between px-4 sm:px-6 lg:px-8">
 
             <router-link to="/" @click="closeMenu" class="flex items-center gap-3 group">
@@ -88,6 +92,11 @@ const userInitial = computed(() => {
                                 {{ userInitial }}
                             </span>
                             <span class="max-w-25 truncate">{{ auth.user?.name || 'Profile' }}</span>
+                        </router-link>
+                        <router-link :to="settingsPath"
+                            class="flex h-10 w-10 items-center justify-center rounded-2xl border border-slate-200/60 text-slate-600 hover:bg-white/60 dark:border-slate-800 dark:text-slate-300"
+                            title="Şahsy sazlamalar">
+                            <i class="ti ti-settings text-lg"></i>
                         </router-link>
                         <button @click="signOut"
                             class="flex items-center justify-center w-10 h-10 rounded-2xl bg-red-50 dark:bg-red-950/50 hover:bg-red-100 text-red-600 dark:text-red-400 transition cursor-pointer shadow-sm"
@@ -143,6 +152,10 @@ const userInitial = computed(() => {
                             {{ userInitial }}
                         </span>
                         Şahsy profil
+                    </router-link>
+                    <router-link :to="settingsPath" @click="closeMenu"
+                        class="flex items-center gap-3 w-full py-3 px-4 rounded-2xl border border-slate-200 dark:border-slate-800 font-semibold text-sm">
+                        <i class="ti ti-settings text-xl"></i> Şahsy sazlamalar
                     </router-link>
                     <button @click="signOut"
                         class="flex items-center justify-center gap-2 w-full py-3 px-4 text-center rounded-2xl bg-red-600 hover:bg-red-700 text-white font-semibold text-sm transition shadow-md">

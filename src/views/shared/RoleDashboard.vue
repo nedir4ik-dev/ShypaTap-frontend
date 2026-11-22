@@ -11,10 +11,16 @@
         <p class="text-sm text-slate-500 dark:text-slate-400">Ulgamyň hakyky wagtda işleýän maglumatlary we dolandyryş
           paneli</p>
       </div>
-      <button @click="load"
-        class="px-5 py-2.5 rounded-2xl bg-emerald-600 hover:bg-emerald-500 text-white font-semibold text-sm transition shadow-lg shadow-emerald-600/30 cursor-pointer flex items-center gap-2">
-        <i class="ti ti-refresh text-lg"></i> Täzele
-      </button>
+      <div class="flex flex-wrap gap-2">
+        <router-link v-if="!admin" to="/receptionist/payments"
+          class="px-5 py-2.5 rounded-2xl border border-emerald-600 text-emerald-700 dark:text-emerald-300 font-semibold text-sm">Tölegler</router-link>
+        <router-link v-if="!admin" to="/receptionist/settings"
+          class="px-5 py-2.5 rounded-2xl border border-slate-300 text-slate-700 dark:text-slate-200 font-semibold text-sm">Sazlamalar</router-link>
+        <button @click="load"
+          class="px-5 py-2.5 rounded-2xl bg-emerald-600 hover:bg-emerald-500 text-white font-semibold text-sm transition shadow-lg shadow-emerald-600/30 cursor-pointer flex items-center gap-2">
+          <i class="ti ti-refresh text-lg"></i> Täzele
+        </button>
+      </div>
     </div>
 
     <div v-if="error"
@@ -74,7 +80,7 @@
                 </td>
                 <td class="p-3" v-if="section === 'appointments'">
                   {{ row.appointment_date?.split('T')[0] }} <span class="text-emerald-600 font-mono">{{ row.start_time
-                  }}</span>
+                    }}</span>
                 </td>
                 <td class="p-3">
                   <span class="px-3 py-1 rounded-full text-xs font-semibold" :class="getStatusClass(row.status)">

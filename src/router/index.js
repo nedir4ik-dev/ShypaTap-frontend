@@ -15,6 +15,9 @@ import RoleDashboard from "@/views/shared/RoleDashboard.vue";
 import AccountView from "@/views/shared/AccountView.vue";
 import ClinicsView from "@/views/public/ClinicsView.vue";
 import DoctorProfileView from "@/views/doctor/DoctorProfileView.vue";
+import AppointmentDetailView from "@/views/doctor/AppointmentDetailView.vue";
+import PreferencesView from "@/views/shared/PreferencesView.vue";
+import ReceptionistPaymentsView from "@/views/receptionist/PaymentsView.vue";
 const routes = [
   {
     path: "/",
@@ -53,6 +56,11 @@ const routes = [
         meta: { requiresAuth: true, role: "patient" },
       },
       {
+        path: "patient/settings",
+        component: PreferencesView,
+        meta: { requiresAuth: true, role: "patient" },
+      },
+      {
         path: "patient/password",
         component: AccountView,
         props: { mode: "password" },
@@ -70,8 +78,18 @@ const routes = [
         meta: { requiresAuth: true, role: "doctor" },
       },
       {
+        path: "doctor/settings",
+        component: PreferencesView,
+        meta: { requiresAuth: true, role: "doctor" },
+      },
+      {
         path: "doctor/schedule",
         component: DoctorSchedule,
+        meta: { requiresAuth: true, role: "doctor" },
+      },
+      {
+        path: "doctor/appointments/:id",
+        component: AppointmentDetailView,
         meta: { requiresAuth: true, role: "doctor" },
       },
       {
@@ -89,6 +107,16 @@ const routes = [
         path: "doctor/profile",
         component: DoctorProfileView,
         meta: { requiresAuth: true, role: "doctor" },
+      },
+      {
+        path: "receptionist/settings",
+        component: PreferencesView,
+        meta: { requiresAuth: true, role: "receptionist" },
+      },
+      {
+        path: "receptionist/payments",
+        component: ReceptionistPaymentsView,
+        meta: { requiresAuth: true, role: "receptionist" },
       },
       {
         path: "receptionist/profile",

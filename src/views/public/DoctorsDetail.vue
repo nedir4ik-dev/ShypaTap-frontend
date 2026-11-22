@@ -121,6 +121,12 @@ async function book() {
                             <i class="ti ti-stethoscope text-lg"></i> {{ doctor.specialization?.name ||
                                 doctor.specialization }}
                         </p>
+                        <div class="flex items-center gap-2 text-sm font-semibold text-amber-600">
+                            <span>★ {{ doctor.reviews_avg_rating ? Number(doctor.reviews_avg_rating).toFixed(1) : 'Täze'
+                                }} / 5.0</span>
+                            <span class="text-xs font-normal text-slate-500">({{ doctor.reviews?.length || 0 }}
+                                baha)</span>
+                        </div>
                         <div
                             class="flex flex-wrap items-center justify-center sm:justify-start gap-4 text-xs text-slate-500 dark:text-slate-400 pt-1">
                             <span
@@ -153,6 +159,18 @@ async function book() {
                             <i class="ti ti-certificate text-emerald-600"></i> {{ doctor.education || 'Görkezilmedi' }}
                         </p>
                     </div>
+                </div>
+
+                <div class="space-y-3 border-t border-slate-200/60 dark:border-slate-800 pt-6">
+                    <h2 class="text-lg font-bold text-slate-900 dark:text-slate-100">Näsaglaryň bahalandyrmalary</h2>
+                    <article v-for="review in (doctor.reviews || [])" :key="review.id"
+                        class="rounded-2xl bg-slate-50 p-4 dark:bg-slate-800/70">
+                        <div class="flex items-center justify-between gap-3"><strong class="text-sm">Näsag</strong><span
+                                class="font-bold text-amber-600">★ {{ Number(review.rating).toFixed(1) }}/5</span></div>
+                        <p v-if="review.comment" class="mt-2 text-sm text-slate-600 dark:text-slate-300">{{
+                            review.comment }}</p>
+                    </article>
+                    <p v-if="!doctor.reviews?.length" class="text-sm text-slate-500">Entäk bahalandyrma ýok.</p>
                 </div>
 
                 <div class="space-y-4 border-t border-slate-200/60 dark:border-slate-800 pt-6">

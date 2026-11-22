@@ -32,6 +32,23 @@ async function load() {
   }
 }
 
+function formatDate(dateString) {
+  if (!dateString) return ''
+
+  let date = typeof dateString === 'number' && dateString < 10000000000
+    ? new Date(dateString * 1000)
+    : new Date(dateString)
+
+  if (isNaN(date.getTime())) return dateString
+
+  // Netijedäki slash (/) belliklerini nokat (.) bilen çalşýarys
+  return new Intl.DateTimeFormat('tk-TM', {
+    day: '2-digit',
+    month: '2-digit',
+    year: 'numeric'
+  }).format(date).replaceAll('/', '.')
+}
+
 async function setStatus(appointment, status) {
   busyId.value = appointment.id
   error.value = ''
@@ -94,13 +111,15 @@ onMounted(load)
               {{ (a.patient?.name || 'N').trim().charAt(0).toUpperCase() }}
             </div>
             <div>
-              <h2 class="font-bold text-slate-900 dark:text-white">{{ a.patient?.name || 'Näsag' }}</h2>
+              <router-link :to="`/doctor/appointments/${a.id}`" class="font-bold text-emerald-700 hover:underline">{{
+                a.patient?.name || 'Näsag' }} · Jikme-jiklik</router-link>
               <p class="text-xs text-slate-500">{{ a.patient?.phone || a.patient_phone || 'Telefon görkezilmedi' }}</p>
               <p class="mt-1 text-xs text-slate-500">{{ a.clinic?.name || 'Klinika' }}</p>
             </div>
           </div>
           <div class="text-sm text-slate-700 dark:text-slate-300">
-            <p class="font-semibold">{{ a.appointment_date }} · {{ String(a.start_time || '').slice(0, 5) }}</p>
+            <p class="font-semibold">{{ formatDate(a.appointment_date) }} · {{ String(a.start_time || '').slice(0, 5) }}
+            </p>
             <p class="text-xs text-slate-500">{{ a.booking_code || `#${a.id}` }}</p>
           </div>
           <span
@@ -112,6 +131,8 @@ onMounted(load)
           <p v-if="a.reason"><strong>Şikaýat:</strong> {{ a.reason }}</p>
           <p v-if="a.notes"><strong>Bellik:</strong> {{ a.notes }}</p>
         </div>
+        <p v-if="a.review" class="mt-3 text-sm font-semibold text-amber-600">★ {{ Number(a.review.rating).toFixed(1) }}
+          / 5.0 · {{ a.review.comment || 'Teswir ýok' }}</p>
         <div class="mt-4 flex flex-wrap justify-end gap-2" v-if="a.status === 'pending' || a.status === 'confirmed'">
           <button v-if="a.status === 'pending'" @click="setStatus(a, 'confirmed')" :disabled="busyId === a.id"
             class="rounded-xl bg-emerald-700 px-4 py-2 text-xs font-semibold text-white disabled:opacity-50">Tassykla</button>

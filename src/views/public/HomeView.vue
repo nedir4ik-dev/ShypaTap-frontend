@@ -117,8 +117,10 @@
                 class="bg-white/70 dark:bg-slate-900/70 backdrop-blur-md border border-slate-200/60 dark:border-slate-800/60 rounded-3xl p-6 shadow-lg hover:shadow-xl transition-all flex flex-col justify-between h-full">
                 <div>
                   <div class="flex items-center gap-4 mb-4">
-                    <div
-                      class="w-14 h-14 rounded-2xl bg-emerald-600/15 dark:bg-emerald-500/20 text-emerald-700 dark:text-emerald-400 font-bold text-xl flex items-center justify-center shrink-0">
+                    <img v-if="doctor.user?.avatar_url" :src="doctor.user?.avatar_url" :alt="doctor.name"
+                      class="h-14 w-14 rounded-2xl object-cover" />
+                    <div v-else
+                      class="flex h-14 w-14 items-center justify-center rounded-2xl bg-emerald-100 text-xl font-bold text-emerald-800">
                       {{ (doctor.user?.name || doctor.name || 'L').charAt(0) }}
                     </div>
                     <div>
@@ -180,7 +182,8 @@
           </div>
           <div>
             <h3 class="text-lg font-bold text-slate-900 dark:text-slate-100">{{ clinic.name }}</h3>
-            <p class="text-xs text-slate-500 dark:text-slate-400 mt-1">📍 {{ clinic.address || 'Salgysy görkezilmedik'
+            <p class="text-xs text-slate-500 dark:text-slate-400 mt-1"><i class="ti ti-map-pin text-xs"></i> {{
+              clinic.address || 'Salgysy görkezilmedik'
             }}</p>
           </div>
           <button @click="selectClinic(clinic.name)"
