@@ -73,10 +73,8 @@ onMounted(load)
         <p class="mt-1 text-sm text-slate-500 dark:text-slate-400">Näsaglaryň kabul ýazgylaryny görüň we ýagdaýyny
           dolandyryň.</p>
       </div>
-      <div class="flex gap-4">
-        <router-link to="/doctor/calendar" class="text-sm font-semibold text-emerald-700 hover:underline">Kalendary →</router-link>
-        <router-link to="/doctor/dashboard" class="text-sm font-semibold text-emerald-700 hover:underline">← Panela dolan</router-link>
-      </div>
+      <router-link to="/doctor/dashboard" class="text-sm font-semibold text-emerald-700 hover:underline">← Panela
+        dolan</router-link>
     </div>
 
     <div class="flex flex-wrap items-center gap-3">

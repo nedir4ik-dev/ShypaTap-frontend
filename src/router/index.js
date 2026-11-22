@@ -11,7 +11,6 @@ import PatientAppointments from "@/views/patient/Appointments.vue";
 import DoctorDashboard from "@/views/doctor/DashboardView.vue";
 import DoctorSchedule from "@/views/doctor/ScheduleView.vue";
 import DoctorAppointments from "@/views/doctor/AppointmentsView.vue";
-import DoctorCalendar from "@/views/doctor/CalendarView.vue";
 import RoleDashboard from "@/views/shared/RoleDashboard.vue";
 import AccountView from "@/views/shared/AccountView.vue";
 import ClinicsView from "@/views/public/ClinicsView.vue";
@@ -86,11 +85,6 @@ const routes = [
       {
         path: "doctor/schedule",
         component: DoctorSchedule,
-        meta: { requiresAuth: true, role: "doctor" },
-      },
-      {
-        path: "doctor/calendar",
-        component: DoctorCalendar,
         meta: { requiresAuth: true, role: "doctor" },
       },
       {
