@@ -10,7 +10,7 @@ const loading = ref(true)
 const error = ref('')
 const busy = ref(false)
 
-const statusLabels = { pending: 'Garaşylýar', confirmed: 'Tassyklanan', rejected: 'Ret edilen', completed: 'Tamamlanan', no_show: 'Gelmedi', cancelled: 'Ýatyrylan' }
+const statusLabels = { pending: 'Garaşylýar', confirmed: 'Tassyklanan', checked_in: 'Geldi', rejected: 'Ret edilen', completed: 'Tamamlanan', no_show: 'Gelmedi', cancelled: 'Ýatyrylan' }
 const paymentLabels = { pending: 'Garaşylýar', paid: 'Tölenen', refunded: 'Yzyna gaýtarylan', cancelled: 'Ýatyrylan' }
 
 async function load() {
@@ -54,16 +54,6 @@ function formatDateTime(dateString) {
   return formattedDate
 }
 
-async function updatePayment(status) {
-  if (!appointment.value?.payment) return
-  busy.value = true
-  error.value = ''
-  try {
-    await api.client.patch(`/doctor/payments/${appointment.value.payment.id}`, { status, note: 'Lukman panelinden üýtgedildi' })
-    await load()
-  } catch (e) { error.value = e.response?.data?.message || 'Tölegi üýtgedip bolmady.' }
-  finally { busy.value = false }
-}
 
 onMounted(load)
 </script>
@@ -77,7 +67,7 @@ onMounted(load)
     <template v-else-if="appointment">
       <div
         class="rounded-3xl border border-slate-200 bg-white p-6 shadow-sm dark:border-slate-800 dark:bg-slate-900 space-y-5">
-        <div class="flex flex-wrap justify-between gap-2 items-center *:">
+        <div class="flex flex-wrap justify-between gap-2 items-center">
           <div>
             <p class="text-xs text-slate-500">Bron belgisi</p>
             <h1 class="text-2xl font-extrabold">{{ appointment.booking_code }}</h1>
@@ -137,14 +127,7 @@ onMounted(load)
         }}</p>
         <p class="text-xs text-slate-500">Usuly: {{ appointment.payment.payment_method }} · Tölenen wagty: {{
           formatDateTime(appointment.payment.paid_at) }}</p>
-        <div class="flex flex-wrap gap-2">
-          <button v-if="appointment.payment.status === 'pending'" @click="updatePayment('paid')" :disabled="busy"
-            class="rounded-xl bg-emerald-700 px-4 py-2 text-sm font-semibold text-white disabled:opacity-50">
-            Tölenen diýip belle</button>
-          <button v-if="appointment.payment.status === 'paid'" @click="updatePayment('refunded')" :disabled="busy"
-            class="rounded-xl border border-amber-300 px-4 py-2 text-sm font-semibold text-amber-700 disabled:opacity-50">Yzyna
-            gaýtaryldy</button>
-        </div>
+        <p class="text-xs text-slate-500">Lukman töleg ýagdaýyny üýtgedip ýa-da yzyna gaýtaryp bilmeýär.</p>
         <div v-if="appointment.payment.histories?.length" class="border-t pt-3">
           <h3 class="font-semibold">Töleg taryhy</h3>
           <ul class="mt-2 space-y-2 text-sm">

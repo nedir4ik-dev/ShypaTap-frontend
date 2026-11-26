@@ -28,6 +28,14 @@
       {{ error }}
     </div>
 
+    <div v-if="!admin && clinics.length" class="flex justify-end">
+      <label class="text-sm font-semibold text-slate-600 dark:text-slate-300">Klinika
+        <select v-model="clinicId" class="ml-2 rounded-xl border border-slate-300 bg-white px-3 py-2 dark:border-slate-700 dark:bg-slate-900">
+          <option value="">Ähli klinikalar</option><option v-for="clinic in clinics" :key="clinic.id" :value="String(clinic.id)">{{ clinic.name }}</option>
+        </select>
+      </label>
+    </div>
+
     <div v-if="loading" class="py-20 text-center text-slate-500 space-y-2">
       <i class="ti ti-loader animate-spin text-4xl text-emerald-600"></i>
       <p>Maglumatlar ýüklenýär...</p>
@@ -97,7 +105,7 @@
 </template>
 
 <script setup>
-import { computed, onMounted, ref } from 'vue'
+import { computed, onMounted, ref, watch } from 'vue'
 import { useRoute } from 'vue-router'
 import api from '@/services/api'
 
@@ -106,6 +114,8 @@ const loading = ref(true)
 const error = ref('')
 const stats = ref({})
 const rows = ref([])
+const clinics = ref([])
+const clinicId = ref('')
 
 const section = computed(() => route.params.section || 'dashboard')
 const admin = route.path.startsWith('/admin')
@@ -114,6 +124,7 @@ const title = computed(() => admin ? 'Administrator paneli' : 'Registratura pane
 const statusLabels = {
   pending: 'Garaşylýar',
   confirmed: 'Tassyklanan',
+  checked_in: 'Geldi',
   cancelled: 'Ýatyrylan',
   rejected: 'Ret edilen',
   completed: 'Tamamlanan',
@@ -134,7 +145,9 @@ const labels = {
   receptionist: 'Registratura',
   pending: 'Garaşylýar',
   confirmed: 'Tassyklanan',
-  today: 'Şu gün'
+  checked_in: 'Geldi',
+  today: 'Şu gün',
+  'waiting-queue': 'Garaşýan näsaglar nobaty'
 }
 
 const getStatIcon = (key) => {
@@ -168,18 +181,22 @@ async function load() {
     } else if (admin) {
       const { data } = await api.client.get(`/admin/${section.value}`)
       rows.value = data.data?.data || data.data || data
-    } else if (section.value === 'dashboard') {
-      const { data } = await api.client.get('/receptionist/dashboard')
-      stats.value = data.data || data
-    } else if (section.value === 'appointments') {
-      const { data } = await api.client.get('/receptionist/appointments')
-      rows.value = data.data || data || []
-    } else if (section.value === 'patients') {
-      const { data } = await api.client.get('/receptionist/patients')
-      rows.value = data.data || data || []
-    } else if (section.value === 'doctors') {
-      const { data } = await api.client.get('/receptionist/doctors')
-      rows.value = data.data || data || []
+    } else {
+      const params = clinicId.value ? { clinic_id: clinicId.value } : {}
+      const dashboard = await api.client.get('/receptionist/dashboard', { params })
+      clinics.value = dashboard.data.clinics || clinics.value
+      if (section.value === 'dashboard') { const summary = { ...dashboard.data }; delete summary.clinics; stats.value = summary }
+      else if (section.value === 'appointments' || section.value === 'waiting-queue') {
+        const query = section.value === 'waiting-queue' ? { ...params, status: 'checked_in' } : params
+        const { data } = await api.client.get('/receptionist/appointments', { params: query })
+        rows.value = data.data || data || []
+      } else if (section.value === 'patients') {
+        const { data } = await api.client.get('/receptionist/patients', { params })
+        rows.value = data.data || data || []
+      } else if (section.value === 'doctors') {
+        const { data } = await api.client.get('/receptionist/doctors', { params })
+        rows.value = data.data || data || []
+      }
     }
   } catch (e) {
     error.value = e.response?.data?.message || 'Maglumatlary alyp bolmady. API rugsadyny ýa-da serweri barlaň.'
@@ -187,6 +204,7 @@ async function load() {
     loading.value = false
   }
 }
+watch([section, clinicId], load)
 
 onMounted(load)
 </script>

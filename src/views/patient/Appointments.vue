@@ -10,7 +10,7 @@ const selected = ref(null)
 const rating = ref(5)
 const comment = ref('')
 
-const status = { pending: 'Garaşylýar', confirmed: 'Tassyklanan', rejected: 'Ret edilen', completed: 'Tamamlanan', cancelled: 'Ýatyrylan', no_show: 'Gelmedi' }
+const status = { pending: 'Garaşylýar', confirmed: 'Tassyklanan', checked_in: 'Näsag geldi', rejected: 'Ret edilen', completed: 'Tamamlanan', cancelled: 'Ýatyrylan', no_show: 'Gelmedi' }
 const formatDate = (d) => d ? d.split('T')[0] : '—'
 
 async function load() {
@@ -24,11 +24,13 @@ async function cancel(a) {
   catch (e) { error.value = e.response?.data?.message || 'Ýatyryp bolmady.' }
 }
 function openReview(a) { selected.value = a; rating.value = 5; comment.value = '' }
+function editReview(a) { selected.value = a; rating.value = Number(a.review?.rating || 5); comment.value = a.review?.comment || '' }
 async function submitReview() {
   if (!selected.value) return
   saving.value = true; error.value = ''
   try {
-    await api.client.post(`/appointments/${selected.value.id}/review`, { rating: rating.value, comment: comment.value })
+    if (selected.value.review) await api.client.patch(`/reviews/${selected.value.review.id}`, { rating: rating.value, comment: comment.value })
+    else await api.client.post(`/appointments/${selected.value.id}/review`, { rating: rating.value, comment: comment.value })
     selected.value = null; await load()
   } catch (e) { error.value = e.response?.data?.message || 'Baha iberilmedi.' }
   finally { saving.value = false }
@@ -66,6 +68,7 @@ onMounted(load)
         <div v-if="a.review" class="mt-4 rounded-2xl bg-amber-50 p-4 dark:bg-amber-950/30">
           <p class="font-bold text-amber-700 dark:text-amber-300">★ {{ Number(a.review.rating).toFixed(1) }} / 5.0</p>
           <p v-if="a.review.comment" class="mt-1 text-sm">{{ a.review.comment }}</p>
+          <button @click="editReview(a)" class="mt-2 mr-3 text-xs font-semibold text-emerald-700 hover:underline">Bahalandyrmany üýtget</button>
           <button @click="deleteReview(a)"
             class="mt-2 text-xs font-semibold text-red-600 hover:underline">Bahalandyrmany poz</button>
         </div>
@@ -83,7 +86,7 @@ onMounted(load)
       @click.self="selected = null">
       <div class="w-full max-w-lg rounded-3xl bg-white p-6 shadow-2xl dark:bg-slate-900">
         <div class="flex items-center justify-between">
-          <h2 class="text-xl font-bold">Lukmana baha beriň</h2><button @click="selected = null"
+          <h2 class="text-xl font-bold">{{ selected.review ? 'Bahalandyrmany üýtget' : 'Lukmana baha beriň' }}</h2><button @click="selected = null"
             class="text-2xl text-slate-400">×</button>
         </div>
         <p class="mt-1 text-sm text-slate-500">{{ selected.doctor?.user?.name }} · {{ selected.booking_code }}</p>

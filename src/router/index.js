@@ -18,6 +18,8 @@ import DoctorProfileView from "@/views/doctor/DoctorProfileView.vue";
 import AppointmentDetailView from "@/views/doctor/AppointmentDetailView.vue";
 import PreferencesView from "@/views/shared/PreferencesView.vue";
 import ReceptionistPaymentsView from "@/views/receptionist/PaymentsView.vue";
+import ReceptionistAppointmentsView from "@/views/receptionist/AppointmentsView.vue";
+import DoctorReviewsView from "@/views/doctor/ReviewsView.vue";
 const routes = [
   {
     path: "/",
@@ -104,9 +106,19 @@ const routes = [
         meta: { requiresAuth: true, role: "doctor" },
       },
       {
+        path: "doctor/reviews",
+        component: DoctorReviewsView,
+        meta: { requiresAuth: true, role: "doctor" },
+      },
+      {
         path: "doctor/profile",
         component: DoctorProfileView,
         meta: { requiresAuth: true, role: "doctor" },
+      },
+      {
+        path: "receptionist/appointments",
+        component: ReceptionistAppointmentsView,
+        meta: { requiresAuth: true, role: "receptionist" },
       },
       {
         path: "receptionist/settings",

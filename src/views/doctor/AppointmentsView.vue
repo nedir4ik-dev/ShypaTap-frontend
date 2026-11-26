@@ -12,6 +12,7 @@ const statusLabels = {
   pending: 'Garaşylýar',
   confirmed: 'Tassyklanan',
   rejected: 'Ret edilen',
+  checked_in: 'Geldi',
   cancelled: 'Ýatyrylan',
   completed: 'Tamamlanan',
   no_show: 'Gelmedi'
@@ -84,7 +85,7 @@ onMounted(load)
         <option value="">Ählisi</option>
         <option value="pending">Garaşylýar</option>
         <option value="confirmed">Tassyklanan</option>
-        <option value="rejected">Ret edilen</option>
+        <option value="checked_in">Geldi</option>
         <option value="completed">Tamamlanan</option>
         <option value="no_show">Gelmedi</option>
         <option value="cancelled">Ýatyrylan</option>
@@ -133,13 +134,10 @@ onMounted(load)
         </div>
         <p v-if="a.review" class="mt-3 text-sm font-semibold text-amber-600">★ {{ Number(a.review.rating).toFixed(1) }}
           / 5.0 · {{ a.review.comment || 'Teswir ýok' }}</p>
-        <div class="mt-4 flex flex-wrap justify-end gap-2" v-if="a.status === 'pending' || a.status === 'confirmed'">
-          <button v-if="a.status === 'pending'" @click="setStatus(a, 'confirmed')" :disabled="busyId === a.id"
-            class="rounded-xl bg-emerald-700 px-4 py-2 text-xs font-semibold text-white disabled:opacity-50">Tassykla</button>
-          <button v-if="a.status === 'pending'" @click="setStatus(a, 'rejected')" :disabled="busyId === a.id"
-            class="rounded-xl border border-red-200 px-4 py-2 text-xs font-semibold text-red-600 disabled:opacity-50">Ret
-            et</button>
-          <button v-if="a.status === 'confirmed'" @click="setStatus(a, 'completed')" :disabled="busyId === a.id"
+        <div class="mt-4 flex flex-wrap justify-end gap-2" v-if="a.status === 'confirmed' || a.status === 'checked_in'">
+          <button v-if="a.status === 'confirmed'" @click="setStatus(a, 'checked_in')" :disabled="busyId === a.id"
+            class="rounded-xl bg-emerald-700 px-4 py-2 text-xs font-semibold text-white disabled:opacity-50">Näsag geldi</button>
+          <button v-if="a.status === 'checked_in'" @click="setStatus(a, 'completed')" :disabled="busyId === a.id"
             class="rounded-xl bg-blue-700 px-4 py-2 text-xs font-semibold text-white disabled:opacity-50">Tamamlandy</button>
           <button v-if="a.status === 'confirmed'" @click="setStatus(a, 'no_show')" :disabled="busyId === a.id"
             class="rounded-xl border border-amber-200 px-4 py-2 text-xs font-semibold text-amber-700 disabled:opacity-50">Gelmedi</button>
