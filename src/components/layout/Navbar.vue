@@ -14,13 +14,13 @@ function apply(v) {
     localStorage.setItem('theme', v ? 'dark' : 'light');
 }
 
-onMounted(() => {
+onMounted(async () => {
     const savedTheme = localStorage.getItem('theme') || 'system';
     const prefersDark = window.matchMedia?.('(prefers-color-scheme: dark)').matches ?? false;
     dark.value = savedTheme === 'dark' || (savedTheme === 'system' && prefersDark);
     document.documentElement.classList.toggle('dark', dark.value);
     if (auth.token && !auth.user) {
-        auth.fetchUser?.();
+        await auth.hydrate();
     }
 });
 
@@ -40,28 +40,6 @@ const closeMenu = () => {
 
 const profilePath = computed(() => ({ patient: '/patient/dashboard', doctor: '/doctor/dashboard', receptionist: '/receptionist/dashboard' }[auth.user?.role] || auth.dashboardPath()));
 const settingsPath = computed(() => ({ patient: '/patient/settings', doctor: '/doctor/settings', receptionist: '/receptionist/settings' }[auth.user?.role] || profilePath.value));
-
-const roleLinks = computed(() => {
-    const role = auth.user?.role;
-    if (role === 'doctor') return [
-        { to: '/doctor/dashboard', label: 'Lukman paneli' },
-        { to: '/doctor/appointments', label: 'Kabul ýazgylarym' },
-        { to: '/doctor/schedule', label: 'Iş tertibim' },
-        { to: '/doctor/reviews', label: 'Bahalandyrmalar' },
-    ];
-    if (role === 'receptionist') return [
-        { to: '/receptionist/dashboard', label: 'Registratura' },
-        { to: '/receptionist/appointments', label: 'Kabul ýazgylary' },
-        { to: '/receptionist/patients', label: 'Näsaglar' },
-        { to: '/receptionist/waiting-queue', label: 'Nobat' },
-        { to: '/receptionist/payments', label: 'Tölegler' },
-    ];
-    if (role === 'patient') return [
-        { to: '/patient/dashboard', label: 'Şahsy panel' },
-        { to: '/patient/appointments', label: 'Kabul ýazgylarym' },
-    ];
-    return [];
-});
 
 const userInitial = computed(() => {
     return auth.user?.name ? auth.user.name.charAt(0).toUpperCase() : 'Ş';
@@ -94,8 +72,6 @@ const userInitial = computed(() => {
                     class="flex items-center gap-1.5 text-sm hover:text-emerald-600 dark:hover:text-emerald-400 transition py-1">
                     <i class="ti ti-building-hospital text-lg"></i> Klinikalar
                 </router-link>
-                <router-link v-for="link in roleLinks" :key="link.to" :to="link.to"
-                    class="flex items-center gap-1.5 text-sm hover:text-emerald-600 dark:hover:text-emerald-400 transition py-1">{{ link.label }}</router-link>
             </nav>
 
             <div class="flex items-center gap-3">
@@ -164,8 +140,6 @@ const userInitial = computed(() => {
                     class="flex items-center gap-3 py-2.5 px-3 rounded-2xl hover:bg-white/60 dark:hover:bg-slate-900 transition">
                     <i class="ti ti-building-hospital text-xl text-emerald-600"></i> Klinikalar
                 </router-link>
-                <router-link v-for="link in roleLinks" :key="link.to" :to="link.to" @click="closeMenu"
-                    class="flex items-center gap-3 py-2.5 px-3 rounded-2xl hover:bg-white/60 dark:hover:bg-slate-900 transition">{{ link.label }}</router-link>
             </nav>
             <div class="flex flex-col gap-2.5 pt-1">
                 <template v-if="auth.token">

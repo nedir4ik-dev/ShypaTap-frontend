@@ -27,7 +27,7 @@
             </div>
         </div>
 
-        <div class="grid gap-6 sm:grid-cols-2 lg:grid-cols-4">
+        <div class="grid gap-6 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-5">
             <router-link to="/doctor/appointments"
                 class="bg-white/70 dark:bg-slate-900/70 backdrop-blur-xl p-6 rounded-3xl border border-slate-200/60 dark:border-slate-800/60 shadow-xl hover:shadow-2xl transition-all group">
                 <div
@@ -69,6 +69,16 @@
                 </div>
                 <h2 class="text-lg font-bold text-slate-900 dark:text-slate-100">Bildirişler</h2>
                 <p class="mt-2 text-xs text-slate-500 dark:text-slate-400">Täze kabul ýazgylary barada habar alyň.</p>
+            </router-link>
+
+            <router-link to="/doctor/reviews"
+                class="bg-white/70 dark:bg-slate-900/70 backdrop-blur-xl p-6 rounded-3xl border border-slate-200/60 dark:border-slate-800/60 shadow-xl hover:shadow-2xl transition-all group">
+                <div
+                    class="w-12 h-12 rounded-2xl bg-violet-100 dark:bg-violet-950/60 text-violet-700 dark:text-violet-400 flex items-center justify-center text-2xl mb-4 group-hover:scale-110 transition">
+                    <i class="ti ti-star"></i>
+                </div>
+                <h2 class="text-lg font-bold text-slate-900 dark:text-slate-100">Bahalandyrmalar</h2>
+                <p class="mt-2 text-xs text-slate-500 dark:text-slate-400">Näsaglaryň pikirlerini we bahalaryny görüň.</p>
             </router-link>
         </div>
     </section>

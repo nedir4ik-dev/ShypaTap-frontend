@@ -56,7 +56,17 @@
         </article>
       </div>
 
-      <div v-else
+      <div v-if="section === 'dashboard' && !admin" class="grid gap-4 sm:grid-cols-2 lg:grid-cols-5">
+        <router-link v-for="link in quickLinks" :key="link.to" :to="link.to"
+          class="group flex items-center gap-3 rounded-2xl border border-slate-200/60 bg-white/70 p-4 shadow-sm transition hover:-translate-y-0.5 hover:shadow-lg dark:border-slate-800/60 dark:bg-slate-900/70">
+          <span class="flex h-10 w-10 shrink-0 items-center justify-center rounded-xl bg-emerald-100 text-xl text-emerald-700 transition group-hover:scale-105 dark:bg-emerald-950/60 dark:text-emerald-400">
+            <i :class="link.icon"></i>
+          </span>
+          <span class="text-sm font-semibold text-slate-800 dark:text-slate-100">{{ link.label }}</span>
+        </router-link>
+      </div>
+
+      <div v-if="section !== 'dashboard'"
         class="bg-white/70 dark:bg-slate-900/70 backdrop-blur-xl overflow-hidden p-6 rounded-3xl border border-slate-200/60 dark:border-slate-800/60 shadow-xl space-y-4">
         <div class="flex items-center justify-between border-b border-slate-200/60 dark:border-slate-800 pb-4">
           <h2 class="text-xl font-bold text-slate-900 dark:text-slate-100">{{ labels[section] || section }}</h2>
@@ -149,6 +159,14 @@ const labels = {
   today: 'Şu gün',
   'waiting-queue': 'Garaşýan näsaglar nobaty'
 }
+
+const quickLinks = [
+  { to: '/receptionist/appointments', label: 'Kabul ýazgylary', icon: 'ti ti-calendar-event' },
+  { to: '/receptionist/patients', label: 'Näsaglar', icon: 'ti ti-users' },
+  { to: '/receptionist/waiting-queue', label: 'Nobat', icon: 'ti ti-hourglass' },
+  { to: '/receptionist/payments', label: 'Tölegler', icon: 'ti ti-credit-card' },
+  { to: '/receptionist/settings', label: 'Sazlamalar', icon: 'ti ti-settings' },
+]
 
 const getStatIcon = (key) => {
   switch (key) {
