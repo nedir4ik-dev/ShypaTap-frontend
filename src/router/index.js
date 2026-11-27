@@ -137,12 +137,12 @@ const routes = [
         meta: { requiresAuth: true, role: "receptionist" },
       },
       {
-        path: "receptionist/dashboard",
+        path: "receptionist/:section?",
         component: RoleDashboard,
         meta: { requiresAuth: true, role: "receptionist" },
       },
       {
-        path: "receptionist/:section?",
+        path: "receptionist/dashboard",
         component: RoleDashboard,
         meta: { requiresAuth: true, role: "receptionist" },
       },

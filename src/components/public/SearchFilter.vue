@@ -21,7 +21,7 @@ const selectedClinic = defineModel('selectedClinic', { type: String, default: ''
             <div class="relative">
                 <input v-model="searchQuery" type="text" placeholder="Lukmanyň ady ýa-da hünäri..."
                     class="w-full px-4 py-3 pl-11 rounded-2xl bg-slate-100/60 dark:bg-slate-800/60 border border-slate-200 dark:border-slate-700 text-slate-900 dark:text-slate-100 focus:outline-none focus:ring-2 focus:ring-emerald-500 transition-all text-sm" />
-                <span class="absolute left-4 top-3.5 text-slate-400">🔍</span>
+                <span class="absolute left-4 top-3.5 text-slate-400"><i class="ti ti-search"></i></span>
             </div>
 
             <select v-model="selectedSpecialization"

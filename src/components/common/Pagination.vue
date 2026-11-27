@@ -45,7 +45,7 @@
 <script setup>
 defineProps({
     modelValue: { type: Number, required: true },
-    totalPages: { type: Number, required: true } 
+    totalPages: { type: Number, required: true }
 })
 
 defineEmits(['page-change'])

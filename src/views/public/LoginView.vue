@@ -65,7 +65,7 @@ const errorMessage = ref('')
 const handleLogin = async () => {
     loading.value = true
     errorMessage.value = ''
-    
+
     const result = await authStore.login(form.value)
     if (result.success) {
         router.push(authStore.dashboardPath())

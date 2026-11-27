@@ -184,7 +184,7 @@
             <h3 class="text-lg font-bold text-slate-900 dark:text-slate-100">{{ clinic.name }}</h3>
             <p class="text-xs text-slate-500 dark:text-slate-400 mt-1"><i class="ti ti-map-pin text-xs"></i> {{
               clinic.address || 'Salgysy görkezilmedik'
-            }}</p>
+              }}</p>
           </div>
           <button @click="selectClinic(clinic.name)"
             class="w-full py-2.5 px-4 rounded-xl bg-slate-100 hover:bg-emerald-600 hover:text-white dark:bg-slate-800 dark:hover:bg-emerald-600 text-slate-700 dark:text-slate-200 text-xs font-semibold transition cursor-pointer">

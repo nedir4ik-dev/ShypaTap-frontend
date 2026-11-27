@@ -42,7 +42,6 @@ function formatDate(dateString) {
 
   if (isNaN(date.getTime())) return dateString
 
-  // Netijedäki slash (/) belliklerini nokat (.) bilen çalşýarys
   return new Intl.DateTimeFormat('tk-TM', {
     day: '2-digit',
     month: '2-digit',
@@ -51,6 +50,13 @@ function formatDate(dateString) {
 }
 
 async function setStatus(appointment, status) {
+  if (['rejected', 'cancelled'].includes(status)) {
+    const msg = status === 'rejected'
+      ? 'Bu kabul ýazgysyny ret etmek isleýärsiňizmi?'
+      : 'Bu kabul ýazgysyny ýatyrmak isleýärsiňizmi?'
+    if (!confirm(msg)) return
+  }
+
   busyId.value = appointment.id
   error.value = ''
   try {
@@ -88,6 +94,7 @@ onMounted(load)
         <option value="checked_in">Geldi</option>
         <option value="completed">Tamamlanan</option>
         <option value="no_show">Gelmedi</option>
+        <option value="rejected">Ret edilen</option>
         <option value="cancelled">Ýatyrylan</option>
       </select>
       <button @click="load"
@@ -134,13 +141,31 @@ onMounted(load)
         </div>
         <p v-if="a.review" class="mt-3 text-sm font-semibold text-amber-600">★ {{ Number(a.review.rating).toFixed(1) }}
           / 5.0 · {{ a.review.comment || 'Teswir ýok' }}</p>
-        <div class="mt-4 flex flex-wrap justify-end gap-2" v-if="a.status === 'confirmed' || a.status === 'checked_in'">
-          <button v-if="a.status === 'confirmed'" @click="setStatus(a, 'checked_in')" :disabled="busyId === a.id"
-            class="rounded-xl bg-emerald-700 px-4 py-2 text-xs font-semibold text-white disabled:opacity-50">Näsag geldi</button>
-          <button v-if="a.status === 'checked_in'" @click="setStatus(a, 'completed')" :disabled="busyId === a.id"
-            class="rounded-xl bg-blue-700 px-4 py-2 text-xs font-semibold text-white disabled:opacity-50">Tamamlandy</button>
-          <button v-if="a.status === 'confirmed'" @click="setStatus(a, 'no_show')" :disabled="busyId === a.id"
-            class="rounded-xl border border-amber-200 px-4 py-2 text-xs font-semibold text-amber-700 disabled:opacity-50">Gelmedi</button>
+
+        <div class="mt-4 flex flex-wrap justify-end gap-2"
+          v-if="['pending', 'confirmed', 'checked_in'].includes(a.status)">
+          <template v-if="a.status === 'pending'">
+            <button @click="setStatus(a, 'confirmed')" :disabled="busyId === a.id"
+              class="rounded-xl bg-emerald-700 px-4 py-2 text-xs font-semibold text-white hover:bg-emerald-600 disabled:opacity-50">Tassykla</button>
+            <button @click="setStatus(a, 'rejected')" :disabled="busyId === a.id"
+              class="rounded-xl border border-red-200 px-4 py-2 text-xs font-semibold text-red-600 hover:bg-red-50 disabled:opacity-50">Ret
+              et</button>
+          </template>
+
+          <template v-else-if="a.status === 'confirmed'">
+            <button @click="setStatus(a, 'checked_in')" :disabled="busyId === a.id"
+              class="rounded-xl bg-emerald-700 px-4 py-2 text-xs font-semibold text-white hover:bg-emerald-600 disabled:opacity-50">Näsag
+              geldi</button>
+            <button @click="setStatus(a, 'no_show')" :disabled="busyId === a.id"
+              class="rounded-xl border border-amber-200 px-4 py-2 text-xs font-semibold text-amber-700 hover:bg-amber-50 disabled:opacity-50">Gelmedi</button>
+            <button @click="setStatus(a, 'cancelled')" :disabled="busyId === a.id"
+              class="rounded-xl border border-red-200 px-4 py-2 text-xs font-semibold text-red-600 hover:bg-red-50 disabled:opacity-50">Ýatyr</button>
+          </template>
+
+          <template v-else-if="a.status === 'checked_in'">
+            <button @click="setStatus(a, 'completed')" :disabled="busyId === a.id"
+              class="rounded-xl bg-blue-700 px-4 py-2 text-xs font-semibold text-white hover:bg-blue-600 disabled:opacity-50">Tamamlandy</button>
+          </template>
         </div>
       </article>
     </div>

@@ -23,6 +23,26 @@ async function load() {
   } finally { loading.value = false }
 }
 
+async function setStatus(status) {
+  if (['rejected', 'cancelled'].includes(status)) {
+    const msg = status === 'rejected'
+      ? 'Bu kabul ýazgysyny ret etmek isleýärsiňizmi?'
+      : 'Bu kabul ýazgysyny ýatyrmak isleýärsiňizmi?'
+    if (!confirm(msg)) return
+  }
+
+  busy.value = true
+  error.value = ''
+  try {
+    await api.client.patch(`/doctor/appointments/${appointment.value.id}/status`, { status })
+    await load()
+  } catch (e) {
+    error.value = e.response?.data?.message || 'Kabul ýazgysynyň ýagdaýyny üýtgedip bolmady.'
+  } finally {
+    busy.value = false
+  }
+}
+
 function formatDate(dateString) {
   if (!dateString) return ''
   let date = typeof dateString === 'number' && dateString < 10000000000
@@ -43,17 +63,14 @@ function formatDateTime(dateString) {
   let date = new Date(dateString)
   if (isNaN(date.getTime())) return dateString
 
-  const formattedDate = new Intl.DateTimeFormat('tk-TM', {
+  return new Intl.DateTimeFormat('tk-TM', {
     day: '2-digit',
     month: '2-digit',
     year: 'numeric',
     hour: '2-digit',
     minute: '2-digit'
   }).format(date).replaceAll('/', '.')
-
-  return formattedDate
 }
-
 
 onMounted(load)
 </script>
@@ -104,6 +121,30 @@ onMounted(load)
         <div v-if="appointment.notes" class="rounded-xl bg-slate-50 p-4 dark:bg-slate-800">
           <p class="text-xs text-slate-500">Goşmaça bellik</p>{{ appointment.notes }}
         </div>
+
+        <div class="flex flex-wrap justify-end gap-2 border-t border-slate-100 pt-4 dark:border-slate-800"
+          v-if="['pending', 'confirmed', 'checked_in'].includes(appointment.status)">
+          <template v-if="appointment.status === 'pending'">
+            <button @click="setStatus('confirmed')" :disabled="busy"
+              class="rounded-xl bg-emerald-700 px-4 py-2 text-xs font-semibold text-white hover:bg-emerald-600 disabled:opacity-50">Tassykla</button>
+            <button @click="setStatus('rejected')" :disabled="busy"
+              class="rounded-xl border border-red-200 px-4 py-2 text-xs font-semibold text-red-600 hover:bg-red-50 disabled:opacity-50">Ret
+              et</button>
+          </template>
+          <template v-else-if="appointment.status === 'confirmed'">
+            <button @click="setStatus('checked_in')" :disabled="busy"
+              class="rounded-xl bg-emerald-700 px-4 py-2 text-xs font-semibold text-white hover:bg-emerald-600 disabled:opacity-50">Näsag
+              geldi</button>
+            <button @click="setStatus('no_show')" :disabled="busy"
+              class="rounded-xl border border-amber-200 px-4 py-2 text-xs font-semibold text-amber-700 hover:bg-amber-50 disabled:opacity-50">Gelmedi</button>
+            <button @click="setStatus('cancelled')" :disabled="busy"
+              class="rounded-xl border border-red-200 px-4 py-2 text-xs font-semibold text-red-600 hover:bg-red-50 disabled:opacity-50">Ýatyr</button>
+          </template>
+          <template v-else-if="appointment.status === 'checked_in'">
+            <button @click="setStatus('completed')" :disabled="busy"
+              class="rounded-xl bg-blue-700 px-4 py-2 text-xs font-semibold text-white hover:bg-blue-600 disabled:opacity-50">Tamamlandy</button>
+          </template>
+        </div>
       </div>
 
       <div
@@ -124,7 +165,7 @@ onMounted(load)
         <h2 class="text-xl font-bold">Töleg</h2>
         <p>{{ appointment.payment.amount }} {{ appointment.payment.currency }} · {{
           paymentLabels[appointment.payment.status]
-        }}</p>
+          }}</p>
         <p class="text-xs text-slate-500">Usuly: {{ appointment.payment.payment_method }} · Tölenen wagty: {{
           formatDateTime(appointment.payment.paid_at) }}</p>
         <p class="text-xs text-slate-500">Lukman töleg ýagdaýyny üýtgedip ýa-da yzyna gaýtaryp bilmeýär.</p>
